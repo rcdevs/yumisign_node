@@ -1,0 +1,9 @@
+# Ignore all
+*
+
+# Allowed files
+!/README.md
+!/AUTHENTICATION.md
+!/package.json
+!/lib/**/*
+!/types/**/*

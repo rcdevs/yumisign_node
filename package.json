@@ -1,0 +1,63 @@
+{
+  "name": "yumisign",
+  "version": "1.0.0",
+  "description": "YumiSign API wrapper",
+  "keywords": [
+    "yumisgn",
+    "signature",
+    "api"
+  ],
+  "homepage": "https://github.com/rcdevs/yumisign_node",
+  "author": "YumiSign",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rcdevs/yumisign_node.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rcdevs/yumisign_node/issues"
+  },
+  "engines": {
+    "node": ">=12.*"
+  },
+  "main": "lib/yumisign.js",
+  "types": "types/yumisign.d.js",
+  "devDependencies": {
+    "@types/chai": "^4.3.4",
+    "@types/chai-as-promised": "^7.1.5",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "chai": "^4.3.6",
+    "chai-as-promised": "~7.1.1",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-chai-friendly": "^0.7.2",
+    "eslint-plugin-prettier": "^3.4.1",
+    "nock": "^13.2.9",
+    "node-fetch": "^2.6.7",
+    "prettier": "^1.16.4",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
+  },
+  "resolutions": {
+    "minimist": "1.2.6",
+    "nanoid": "^3.2.0"
+  },
+  "dependencies": {
+    "@types/node": ">=8.1.0",
+    "qs": "^6.11.0"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf ./node_modules/.cache ./lib",
+    "prepack": "npm install && npm run build",
+    "lint": "eslint --ext .js,.jsx,.ts .",
+    "fix": "eslint --ext .js,.jsx,.ts . --fix"
+  },
+  "exports": {
+    "types": "./types/yumisign.d.ts",
+    "browser": "./lib/yumisign.js",
+    "worker": "./lib/yumisign.js",
+    "default": "./lib/yumisign.js"
+  }
+}
