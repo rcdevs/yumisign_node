@@ -6,7 +6,7 @@ module.exports = YumiSignResource.extend({
 
   retrieve(
     id: string,
-    params: YumiSign.EnvelopeRetrieveParams
+    params?: YumiSign.EnvelopeRetrieveParams
   ): Promise<YumiSign.Response<YumiSign.Envelope>> {
     return this._makeRequest(`/${id}${params?.session ? '?session=1' : ''}`, {
       method: 'GET',
@@ -55,14 +55,24 @@ module.exports = YumiSignResource.extend({
     });
   },
 
-  designerUri(id: string): Promise<string> {
+  designerUri(
+    id: string,
+    params?: YumiSign.EnvelopeDesignerUriParams
+  ): Promise<string> {
     return new Promise((resolve, reject) => {
       this._makeRequest<{session: string; designerUrl: string}>(
         `/${id}/session`,
         {method: 'GET'}
       )
         .then(({designerUrl}) => {
-          resolve(designerUrl);
+          const url = new URL(designerUrl);
+          if (params?.callback) {
+            url.searchParams.append('callback', encodeURI(params.callback));
+          }
+          if (params?.autoStart) {
+            url.searchParams.append('auto_start', '1');
+          }
+          resolve(url.toString());
         })
         .catch((error) => reject(error));
     });

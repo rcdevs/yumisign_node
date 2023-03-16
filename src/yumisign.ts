@@ -17,7 +17,7 @@ function YumiSign(this: YumiSignObject, config: YumiSignObjectConfig): void {
 }
 
 YumiSign.prototype = {
-  _getBaseUri(): string {
+  getBaseUri(): string {
     return this._config?.baseUri || 'https://app.yumisign.com';
   },
 

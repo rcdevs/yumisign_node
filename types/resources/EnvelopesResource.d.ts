@@ -63,6 +63,19 @@ declare module 'yumisign' {
       documentName: string;
     }
 
+    interface EnvelopeDesignerUriParams {
+      /**
+       * A callback uri call by the designer.
+       */
+      callback?: string;
+
+      /**
+       * By default, the designer is used to fill fields.
+       * Define this param to "true" if you want to force start envelope after.
+       */
+      autoStart?: boolean;
+    }
+
     class EnvelopesResource extends YumiSignResource {
       /**
        * Retrieves an envelope.
@@ -90,7 +103,10 @@ declare module 'yumisign' {
       /**
        * Get designer uri with public session for place fields in documents.
        */
-      designerUri(id: string): Promise<string>;
+      designerUri(
+        id: string,
+        params?: EnvelopeDesignerUriParams
+      ): Promise<string>;
 
       /**
        * Send the envelope for request signatures.

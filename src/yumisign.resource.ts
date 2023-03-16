@@ -34,7 +34,7 @@ YumisignResource.prototype = {
     const uri = endpoint.startsWith('http')
       ? endpoint
       : [
-          this._yumisign._getBaseUri(),
+          this._yumisign.getBaseUri(),
           this.basePath,
           this.resourcePath,
           endpoint,

@@ -35,7 +35,7 @@ module.exports = YumiSignResource.extend({
 
   authorizeUri(params: YumiSign.OAuthAuthorizeUriParams): string {
     return [
-      `${this._yumisign._getBaseUri()}${authorizePath}`,
+      `${this._yumisign.getBaseUri()}${authorizePath}`,
       `?client_id=${this._yumisign._getClientId()}`,
       `&redirect_uri=${params.redirectUri}`,
       `&state=${params.state}`,

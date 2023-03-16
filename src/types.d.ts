@@ -49,7 +49,7 @@ declare const YumiSign: YumiSignConstructor;
 type YumiSignObject = {
   _oAuthToken?: YumiSignOAuthToken;
   _config: YumiSignObjectConfig;
-  _getBaseUri(): string;
+  getBaseUri(): string;
   _getClientId(): string;
   _getClientSecret(): string;
   _getOAuthToken(): YumiSignOAuthToken;

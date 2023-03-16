@@ -19,6 +19,31 @@ declare module 'yumisign' {
         statusCode: number;
       };
     };
+
+    /**
+     * A container for paginated lists of objects.
+     */
+    interface PaginatedList<T> {
+      total: number;
+      limit: number;
+      pages: number;
+      items: Array<T>;
+    }
+
+    interface PaginatedListPromise<T>
+      extends Promise<YumiSign.Response<PaginatedList<T>>> {}
+
+    interface PaginationParams {
+      /**
+       * A limit on the number of objects to be returned.
+       */
+      limit?: number;
+
+      /**
+       * The number of the page contain objects. The default is 1.
+       */
+      page?: number;
+    }
   }
 
   interface YumiSignOAuthTokenStore {
@@ -78,7 +103,7 @@ declare module 'yumisign' {
     profile: YumiSign.ProfileResource;
     workspaces: YumiSign.WorkspacesResource;
 
-    _getBaseUri(): string;
+    getBaseUri(): string;
     _getClientId(): string;
     _getClientSecret(): string;
     _getOAuthToken(): YumiSign.OAuthToken;
