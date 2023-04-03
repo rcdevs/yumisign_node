@@ -91,14 +91,17 @@ const yumisign = YumiSign({
     },
     set: (oAuthToken) => {
       // Save the oauth token in your store
+    },
+    del: () => {
+      // Remove the stored oauth token if exist
     }
   }
 });
 ```
 
-| Parameter         | Required | Default                    | Description                                            |
-|-------------------|----------|----------------------------|--------------------------------------------------------|
-| `clientId`        | True     |                            | Your YumiSign integration app client id                |
-| `clientSecret`    | True     |                            | Your YumiSign integration app client secret            |
-| `baseUri`         | False    | `https://app.yumisign.com` | Base uri of YumiSign website                           |
-| `oAuthTokenStore` | False    | Local storage              | A store object used to fetch and save your oauth token |
+| Parameter         | Required | Default                    | Description                                                   |
+|-------------------|----------|----------------------------|---------------------------------------------------------------|
+| `clientId`        | True     | No default value           | Your YumiSign integration app client id                       |
+| `clientSecret`    | True     | No default value           | Your YumiSign integration app client secret                   |
+| `baseUri`         | False    | `https://app.yumisign.com` | Base uri of YumiSign website                                  |
+| `oAuthTokenStore` | False    | Local storage              | A store object used to fetch save and remove your oauth token |
