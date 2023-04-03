@@ -13,6 +13,16 @@ module.exports = YumiSignResource.extend({
     });
   },
 
+  list(
+    params: YumiSign.EnvelopeListParams
+  ): YumiSign.BulkPromise<YumiSign.Envelope> {
+    return this._makeRequest('', {
+      method: 'GET',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(params),
+    });
+  },
+
   create(
     params: YumiSign.EnvelopeCreateParams
   ): Promise<YumiSign.Response<YumiSign.Envelope>> {

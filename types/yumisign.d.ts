@@ -21,6 +21,22 @@ declare module 'yumisign' {
     };
 
     /**
+     * A container for a bulk response item.
+     */
+    interface BulkItem<T> {
+      identifier: string;
+      result: boolean;
+      response?: T;
+      error?: {
+        message: string;
+        code?: string;
+      };
+    }
+
+    interface BulkPromise<T>
+      extends Promise<YumiSign.Response<BulkItem<T>[]>> {}
+
+    /**
      * A container for paginated lists of objects.
      */
     interface PaginatedList<T> {
