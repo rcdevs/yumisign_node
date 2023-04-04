@@ -13,13 +13,9 @@ module.exports = YumiSignResource.extend({
     });
   },
 
-  list(
-    params: YumiSign.EnvelopeListParams
-  ): YumiSign.BulkPromise<YumiSign.Envelope> {
-    return this._makeRequest('', {
+  list(ids: string[]): YumiSign.BulkPromise<YumiSign.Envelope> {
+    return this._makeRequest(`?ids[]=${ids.join('&ids[]=')}`, {
       method: 'GET',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(params),
     });
   },
 
