@@ -1,3 +1,4 @@
+import axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
 import proto from './utils/proto';
 const {
   YumiSignAuthenticationError,
@@ -27,54 +28,52 @@ YumisignResource.prototype = {
 
   initialize(): void {},
 
-  _makeRequest(
-    endpoint: string,
-    init: RequestInit
-  ): Promise<YumiSignResponse<any>> {
-    const uri = endpoint.startsWith('http')
-      ? endpoint
-      : [
-          this._yumisign.getBaseUri(),
-          this.basePath,
-          this.resourcePath,
-          endpoint,
-        ].join('');
+  _makeRequest(config: AxiosRequestConfig): Promise<YumiSignResponse<any>> {
+    const {url, ...restConfig} = config;
+    const uri = url ?? '';
+    const requestConfig = {
+      ...restConfig,
+      url: uri.startsWith('http')
+        ? uri
+        : [
+            this._yumisign.getBaseUri(),
+            this.basePath,
+            this.resourcePath,
+            uri,
+          ].join(''),
+    };
 
     const resolveResponse = (
       resolve: (value: any) => void,
-      response: Response
+      response: AxiosResponse
     ): void => {
-      if (
-        response.headers.has('Content-Type') &&
-        response.headers.get('Content-Type') === 'application/json'
-      ) {
+      if (response.headers['content-type'] === 'application/json') {
         const {headers, status: statusCode} = response;
-        const jsonResponse = Promise.resolve(response.json());
+        const jsonResponse = Promise.resolve(response.data);
         Object.assign(jsonResponse, {lastResponse: {headers, statusCode}});
         resolve(jsonResponse);
       } else {
-        const textResponse = Promise.resolve(response.text());
+        const textResponse = Promise.resolve(response.data);
         resolve(textResponse);
       }
     };
 
     const rejectResponse = (
       reject: (value: any) => void,
-      response: Response
+      errorResponse: AxiosResponse
     ): void => {
-      Promise.resolve(response.json()).then((jsonResponse) => {
-        if (jsonResponse.error) {
-          if (jsonResponse.error.statusCode === 401) {
-            reject(new YumiSignAuthenticationError(jsonResponse.error));
-          } else if (jsonResponse.error.statusCode === 403) {
-            reject(new YumiSignPermissionError(jsonResponse.error));
-          } else {
-            reject(YumiSignError.generate(jsonResponse.error));
-          }
+      const errorData = errorResponse.data || {};
+      if (errorData.error) {
+        if (errorData.error.statusCode === 401) {
+          reject(new YumiSignAuthenticationError(errorData.error));
+        } else if (errorData.error.statusCode === 403) {
+          reject(new YumiSignPermissionError(errorData.error));
         } else {
-          reject(jsonResponse);
+          reject(YumiSignError.generate(errorData.error));
         }
-      });
+      } else {
+        reject(errorResponse);
+      }
     };
 
     const rejectError = (reject: (value: any) => void, error: Error): void => {
@@ -86,74 +85,66 @@ YumisignResource.prototype = {
     };
 
     if (!this.publicUri) {
-      const oAuthToken = this._yumisign._getOAuthToken();
-
       const addAuthorizationHeader = (
-        init: RequestInit,
-        oAuthToken: YumiSignOAuthToken
-      ): void => {
-        const headers = init.headers || ({} as Record<string, any>);
-        init.headers = {
-          ...headers,
-          Authorization: `${oAuthToken.token_type} ${oAuthToken.access_token}`,
+        config: AxiosRequestConfig
+      ): AxiosRequestConfig => {
+        const oAuthToken = this._yumisign._getOAuthToken();
+        const headers = config.headers || ({} as {[key: string]: any});
+        return {
+          ...config,
+          headers: {
+            ...headers,
+            Authorization: `${oAuthToken.token_type} ${oAuthToken.access_token}`,
+          },
         };
       };
 
-      addAuthorizationHeader(init, oAuthToken);
-
       return new Promise((resolve, reject) => {
-        fetch(uri, init)
-          .then((response) => {
-            // Need to refresh access token
-            if (response.status === 401) {
-              this._yumisign.oauth
+        return axios
+          .request(addAuthorizationHeader(requestConfig))
+          .then((response) => resolveResponse(resolve, response))
+          .catch((error) => {
+            if (error.response?.status === 401) {
+              const oAuthToken = this._yumisign._getOAuthToken();
+              return this._yumisign.oauth
                 .refresh({
                   refreshToken: oAuthToken.refresh_token,
                 })
-                .then(() => {
-                  addAuthorizationHeader(init, this._yumisign._getOAuthToken());
-                  fetch(uri, init)
-                    .then((retryResponse) => {
-                      // When refresh token return 401 remove this token
-                      if (retryResponse.status === 401) {
-                        this._yumisign.oauth
+                .then(() =>
+                  axios
+                    .request(addAuthorizationHeader(requestConfig))
+                    .then((retryResponse) =>
+                      resolveResponse(resolve, retryResponse)
+                    )
+                    .catch((retryError) => {
+                      if (retryError.response?.status === 401) {
+                        return this._yumisign.oauth
                           .deauthorize()
                           .then(() => {
-                            rejectResponse(reject, retryResponse);
+                            rejectResponse(reject, retryError.response);
                           })
                           .catch((error) => rejectError(reject, error));
-                        // Second request success
-                      } else if (retryResponse.ok) {
-                        resolveResponse(resolve, retryResponse);
-                        // Second request error
+                      } else if (retryError.response?.status) {
+                        rejectResponse(reject, retryError.response);
                       } else {
-                        rejectResponse(reject, retryResponse);
+                        rejectError(reject, retryError);
                       }
                     })
-                    .catch((error) => rejectError(reject, error));
-                })
+                )
                 .catch((error) => rejectError(reject, error));
-              // First request success
-            } else if (response.ok) {
-              resolveResponse(resolve, response);
-              // First request error
+            } else if (error.response?.status) {
+              rejectResponse(reject, error.response);
             } else {
-              rejectResponse(reject, response);
+              rejectError(reject, error);
             }
-          })
-          .catch((error) => rejectError(reject, error));
+          });
       });
     }
 
     return new Promise((resolve, reject) => {
-      fetch(uri, init)
-        .then((response) => {
-          if (response.ok) {
-            resolveResponse(resolve, response);
-          } else {
-            rejectResponse(reject, response);
-          }
-        })
+      axios
+        .request(requestConfig)
+        .then((response) => resolveResponse(resolve, response))
         .catch((error) => rejectError(reject, error));
     });
   },

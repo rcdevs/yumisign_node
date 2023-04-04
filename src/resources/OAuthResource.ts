@@ -1,3 +1,4 @@
+import {AxiosHeaders} from 'axios';
 import YumiSign from 'yumisign';
 const YumiSignResource = require('../yumisign.resource');
 
@@ -45,10 +46,11 @@ module.exports = YumiSignResource.extend({
 
   access(params: YumiSign.OAuthAccessParams): Promise<YumiSign.OAuthToken> {
     return new Promise((resolve, reject) => {
-      this._makeRequest<YumiSign.OAuthToken>('/access', {
+      this._makeRequest<YumiSign.OAuthToken>({
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
+        url: '/access',
+        headers: AxiosHeaders.from({'content-type': 'application/json'}),
+        data: JSON.stringify({
           client_id: this._yumisign._getClientId(),
           client_secret: this._yumisign._getClientSecret(),
           redirect_uri: params.redirectUri,
@@ -80,18 +82,16 @@ module.exports = YumiSignResource.extend({
     params: YumiSign.OAuthRefreshParams
   ): Promise<Omit<YumiSign.OAuthToken, 'refresh_token'>> {
     return new Promise((resolve, reject) => {
-      this._makeRequest<Omit<YumiSign.OAuthToken, 'refresh_token'>>(
-        '/refresh',
-        {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            client_id: this._yumisign._getClientId(),
-            client_secret: this._yumisign._getClientSecret(),
-            refresh_token: params.refreshToken,
-          }),
-        }
-      )
+      this._makeRequest<Omit<YumiSign.OAuthToken, 'refresh_token'>>({
+        method: 'POST',
+        url: '/refresh',
+        headers: AxiosHeaders.from({'content-type': 'application/json'}),
+        data: JSON.stringify({
+          client_id: this._yumisign._getClientId(),
+          client_secret: this._yumisign._getClientSecret(),
+          refresh_token: params.refreshToken,
+        }),
+      })
         .then((oAuthTokenResponse) => {
           const {lastResponse, ...oAuthToken} = oAuthTokenResponse;
 

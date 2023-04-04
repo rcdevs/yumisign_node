@@ -7,13 +7,6 @@ declare module 'yumisign' {
       session?: boolean;
     }
 
-    interface EnvelopeListParams {
-      /**
-       * A list of envelope id you want to retrieve. Min 1, Max 50.
-       */
-      ids: string[];
-    }
-
     interface EnvelopeCreateParams {
       /**
        * A name for your envelope.
@@ -95,7 +88,7 @@ declare module 'yumisign' {
       /**
        * Return a list of envelopes.
        */
-      list(params: EnvelopeListParams): YumiSign.BulkPromise<YumiSign.Envelope>;
+      list(ids: string[]): YumiSign.BulkPromise<YumiSign.Envelope>;
 
       /**
        * Create a new envelope.

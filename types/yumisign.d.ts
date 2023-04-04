@@ -11,6 +11,8 @@
 ///<reference path='./resources/WorkspacesResource.d.ts' />
 
 declare module 'yumisign' {
+  import {AxiosRequestConfig} from 'axios';
+
   // Added to in other modules, referenced above.
   export namespace YumiSign {
     type Response<T> = T & {
@@ -140,10 +142,7 @@ declare module 'yumisign' {
     _yumisign: YumiSign;
     publicUri: boolean;
     resourcePath: string;
-    _makeRequest<T>(
-      endpoint: string,
-      init: RequestInit
-    ): Promise<YumiSign.Response<T>>;
+    _makeRequest<T>(config: AxiosRequestConfig): Promise<YumiSign.Response<T>>;
   }
 
   export default YumiSign;

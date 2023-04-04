@@ -5,24 +5,27 @@ module.exports = YumiSignResource.extend({
   resourcePath: '/profile',
 
   retrieve(): Promise<YumiSign.Response<YumiSign.Profile>> {
-    return this._makeRequest('', {method: 'GET'});
+    return this._makeRequest({method: 'GET'});
   },
 
   listSignedEnvelopes(
     params?: YumiSign.ProfileSignedEnvelopeListParams
   ): YumiSign.PaginatedListPromise<YumiSign.Envelope> {
-    let endpoint = '/signed-envelopes';
+    let url = '/signed-envelopes';
     if (params) {
       const urlSearchParams = new URLSearchParams();
       Object.entries(params).forEach(([key, value]) => {
         urlSearchParams.append(key, value);
       });
-      endpoint =
+      url =
         urlSearchParams.toString().length > 0
-          ? endpoint + `?${urlSearchParams.toString()}`
-          : endpoint;
+          ? url + `?${urlSearchParams.toString()}`
+          : url;
     }
 
-    return this._makeRequest(endpoint, {method: 'GET'});
+    return this._makeRequest({
+      method: 'GET',
+      url,
+    });
   },
 } as YumiSign.ProfileResource);

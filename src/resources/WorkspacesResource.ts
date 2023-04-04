@@ -5,7 +5,7 @@ module.exports = YumiSignResource.extend({
   resourcePath: '/workspaces',
 
   list(): Promise<YumiSign.Response<YumiSign.Workspace[]>> {
-    return this._makeRequest('', {
+    return this._makeRequest({
       method: 'GET',
     });
   },

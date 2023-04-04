@@ -83,8 +83,5 @@ type YumiSignResourceObject = {
   basePath: string;
   resourcePath: string;
   initialize: (...args: Array<any>) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
-  _makeRequest(
-    endpoint: string,
-    init: RequestInit
-  ): Promise<YumiSignResponse<any>>; // eslint-disable-line @typescript-eslint/no-explicit-any
+  _makeRequest(config: Record<string, unknown>): Promise<YumiSignResponse<any>>; // eslint-disable-line @typescript-eslint/no-explicit-any
 };
