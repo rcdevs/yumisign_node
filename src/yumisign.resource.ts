@@ -41,121 +41,102 @@ YumisignResource.prototype = {
         ].join('');
 
     const resolveResponse = (
-      resolve: (value: any) => void,
       response: Response
-    ): void => {
+    ): Promise<YumiSignResponse<any>> => {
+      const {headers, status: statusCode} = response;
+      const unknownError = YumiSignError.generate({
+        statusCode,
+        message: 'Unknown error',
+      });
+
       if (
-        response.headers.has('Content-Type') &&
-        response.headers.get('Content-Type') === 'application/json'
+        headers.has('Content-Type') &&
+        headers.get('Content-Type') === 'application/json'
       ) {
-        const {headers, status: statusCode} = response;
-        const jsonResponse = Promise.resolve(response.json());
-        Object.assign(jsonResponse, {lastResponse: {headers, statusCode}});
-        resolve(jsonResponse);
+        return Promise.resolve(response.json()).then((jsonResponse) => {
+          if (response.ok) {
+            Object.assign(jsonResponse, {lastResponse: {headers, statusCode}});
+            return jsonResponse;
+          } else if (jsonResponse.error) {
+            if (jsonResponse.error.statusCode === 401) {
+              throw new YumiSignAuthenticationError(jsonResponse.error);
+            } else if (jsonResponse.error.statusCode === 403) {
+              throw new YumiSignPermissionError(jsonResponse.error);
+            } else {
+              throw YumiSignError.generate(jsonResponse.error);
+            }
+          } else {
+            throw unknownError;
+          }
+        });
+      } else if (response.ok) {
+        return Promise.resolve(response.text());
       } else {
-        const textResponse = Promise.resolve(response.text());
-        resolve(textResponse);
+        return Promise.resolve().then(() => {
+          throw unknownError;
+        });
       }
     };
 
-    const rejectResponse = (
-      reject: (value: any) => void,
-      response: Response
-    ): void => {
-      Promise.resolve(response.json()).then((jsonResponse) => {
-        if (jsonResponse.error) {
-          if (jsonResponse.error.statusCode === 401) {
-            reject(new YumiSignAuthenticationError(jsonResponse.error));
-          } else if (jsonResponse.error.statusCode === 403) {
-            reject(new YumiSignPermissionError(jsonResponse.error));
-          } else {
-            reject(YumiSignError.generate(jsonResponse.error));
-          }
-        } else {
-          reject(jsonResponse);
-        }
-      });
-    };
-
-    const rejectError = (reject: (value: any) => void, error: Error): void => {
-      reject(
+    const rejectError = (error: Error): Promise<YumiSignResponse<any>> =>
+      Promise.reject(
         error instanceof YumiSignError
           ? error
           : YumiSignError.generate({message: error.message})
       );
-    };
 
     if (!this.publicUri) {
-      const oAuthToken = this._yumisign._getOAuthToken();
-
       const addAuthorizationHeader = (
         init: RequestInit,
         oAuthToken: YumiSignOAuthToken
-      ): void => {
-        const headers = init.headers || ({} as Record<string, any>);
-        init.headers = {
-          ...headers,
-          Authorization: `${oAuthToken.token_type} ${oAuthToken.access_token}`,
+      ): RequestInit => {
+        const {headers, ...restInit} = init;
+        return {
+          headers: {
+            ...(headers || ({} as Record<string, any>)),
+            Authorization: `${oAuthToken.token_type} ${oAuthToken.access_token}`,
+          },
+          ...restInit,
         };
       };
 
-      addAuthorizationHeader(init, oAuthToken);
-
-      return new Promise((resolve, reject) => {
-        fetch(uri, init)
-          .then((response) => {
-            // Need to refresh access token
-            if (response.status === 401) {
-              this._yumisign.oauth
-                .refresh({
-                  refreshToken: oAuthToken.refresh_token,
+      return fetch(
+        uri,
+        addAuthorizationHeader(init, this._yumisign._getOAuthToken())
+      )
+        .then((response) => {
+          if (response.status === 401) {
+            return this._yumisign.oauth
+              .refresh({
+                refreshToken: this._yumisign._getOAuthToken().refresh_token,
+              })
+              .then(() =>
+                fetch(
+                  uri,
+                  addAuthorizationHeader(init, this._yumisign._getOAuthToken())
+                ).then((retryResponse) => {
+                  if (retryResponse.status === 401) {
+                    return this._yumisign.oauth
+                      .deauthorize()
+                      .then(() => retryResponse);
+                  } else {
+                    return retryResponse;
+                  }
                 })
-                .then(() => {
-                  addAuthorizationHeader(init, this._yumisign._getOAuthToken());
-                  fetch(uri, init)
-                    .then((retryResponse) => {
-                      // When refresh token return 401 remove this token
-                      if (retryResponse.status === 401) {
-                        this._yumisign.oauth
-                          .deauthorize()
-                          .then(() => {
-                            rejectResponse(reject, retryResponse);
-                          })
-                          .catch((error) => rejectError(reject, error));
-                        // Second request success
-                      } else if (retryResponse.ok) {
-                        resolveResponse(resolve, retryResponse);
-                        // Second request error
-                      } else {
-                        rejectResponse(reject, retryResponse);
-                      }
-                    })
-                    .catch((error) => rejectError(reject, error));
-                })
-                .catch((error) => rejectError(reject, error));
-              // First request success
-            } else if (response.ok) {
-              resolveResponse(resolve, response);
-              // First request error
-            } else {
-              rejectResponse(reject, response);
-            }
-          })
-          .catch((error) => rejectError(reject, error));
-      });
+              )
+              .catch(() => {
+                return this._yumisign.oauth.deauthorize().then(() => response);
+              });
+          }
+          return response;
+        })
+        .then((response) => resolveResponse(response))
+        .catch((error) => rejectError(error));
     }
 
-    return new Promise((resolve, reject) => {
-      fetch(uri, init)
-        .then((response) => {
-          if (response.ok) {
-            resolveResponse(resolve, response);
-          } else {
-            rejectResponse(reject, response);
-          }
-        })
-        .catch((error) => rejectError(reject, error));
-    });
+    return fetch(uri, init)
+      .then((response) => resolveResponse(response))
+      .catch((error) => rejectError(error));
   },
 } as YumiSignResourceObject;
 
