@@ -1,4 +1,5 @@
 ///<reference path='./errors.d.ts' />
+///<reference path='./resources/Actions.d.ts' />
 ///<reference path='./resources/Documents.d.ts' />
 ///<reference path='./resources/Envelopes.d.ts' />
 ///<reference path='./resources/EnvelopesResource.d.ts' />
@@ -7,6 +8,7 @@
 ///<reference path='./resources/OAuthResource.d.ts' />
 ///<reference path='./resources/Profile.d.ts' />
 ///<reference path='./resources/ProfileResource.d.ts' />
+///<reference path='./resources/Steps.d.ts' />
 ///<reference path='./resources/Workspaces.d.ts' />
 ///<reference path='./resources/WorkspacesResource.d.ts' />
 

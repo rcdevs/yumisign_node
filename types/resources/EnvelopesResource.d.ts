@@ -35,7 +35,7 @@ declare module 'yumisign' {
           name: string;
           email: string;
         }[];
-        type: 'sign' | 'review';
+        type: Step.Type;
       }[];
 
       /**
@@ -112,6 +112,11 @@ declare module 'yumisign' {
         id: string,
         params?: EnvelopeDesignerUriParams
       ): Promise<string>;
+
+      /**
+       * Get an uri for view signed envelope.
+       */
+      viewSignedUri(id: string): Promise<string>;
 
       /**
        * Send the envelope for request signatures.

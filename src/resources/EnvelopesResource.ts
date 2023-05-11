@@ -1,4 +1,5 @@
 import YumiSign from 'yumisign';
+import {transformEnvelope} from '../utils/transformer';
 const YumiSignResource = require('../yumisign.resource');
 
 module.exports = YumiSignResource.extend({
@@ -8,15 +9,25 @@ module.exports = YumiSignResource.extend({
     id: string,
     params?: YumiSign.EnvelopeRetrieveParams
   ): Promise<YumiSign.Response<YumiSign.Envelope>> {
-    return this._makeRequest(`/${id}${params?.session ? '?session=1' : ''}`, {
-      method: 'GET',
-    });
+    return this._makeRequest<YumiSign.Envelope>(
+      `/${id}${params?.session ? '?session=1' : ''}`,
+      {method: 'GET'}
+    ).then((envelope) => transformEnvelope(envelope));
   },
 
-  list(ids: string[]): YumiSign.BulkPromise<YumiSign.Envelope> {
-    return this._makeRequest(`?ids[]=${ids.join('&ids[]=')}`, {
-      method: 'GET',
-    });
+  list(ids: string[]): Promise<YumiSign.BulkItem<YumiSign.Envelope>[]> {
+    return this._makeRequest<YumiSign.BulkItem<YumiSign.Envelope>[]>(
+      `?ids[]=${ids.join('&ids[]=')}`,
+      {method: 'GET'}
+    ).then((bulkItems) =>
+      bulkItems.map((bulkItem) => {
+        const {response, ...rest} = bulkItem;
+        return {
+          response: response ? transformEnvelope(response) : response,
+          ...rest,
+        };
+      })
+    );
   },
 
   create(
@@ -42,10 +53,10 @@ module.exports = YumiSignResource.extend({
       body.append('workspaceId', String(params.workspaceId));
     if (params.expiryDate) body.append('expiryDate', String(params.expiryDate));
 
-    return this._makeRequest('', {
+    return this._makeRequest<YumiSign.Envelope>('', {
       method: 'POST',
       body,
-    });
+    }).then((envelope) => transformEnvelope(envelope));
   },
 
   addDocument(
@@ -55,10 +66,10 @@ module.exports = YumiSignResource.extend({
     const body = new FormData();
     body.append('document', params.document, params.documentName);
 
-    return this._makeRequest(`/${id}/documents`, {
+    return this._makeRequest<YumiSign.Envelope>(`/${id}/documents`, {
       method: 'POST',
       body,
-    });
+    }).then((envelope) => transformEnvelope(envelope));
   },
 
   designerUri(
@@ -84,9 +95,16 @@ module.exports = YumiSignResource.extend({
     });
   },
 
+  viewSignedUri(id: string): Promise<string> {
+    return this._makeRequest<{session: string; envelopeView: string}>(
+      `/${id}/session`,
+      {method: 'GET'}
+    ).then(({envelopeView}) => envelopeView);
+  },
+
   start(id: string): Promise<YumiSign.Response<YumiSign.Envelope>> {
-    return this._makeRequest(`/${id}/start`, {
+    return this._makeRequest<YumiSign.Envelope>(`/${id}/start`, {
       method: 'PUT',
-    });
+    }).then((envelope) => transformEnvelope(envelope));
   },
 } as YumiSign.EnvelopesResource);

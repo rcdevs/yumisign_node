@@ -1,5 +1,7 @@
 declare module 'yumisign' {
   namespace YumiSign {
+    interface ProfileActionListParams extends YumiSign.PaginationParams {}
+
     interface ProfileSignedEnvelopeListParams
       extends YumiSign.PaginationParams {}
 
@@ -8,6 +10,13 @@ declare module 'yumisign' {
        * Retrieves current profile.
        */
       retrieve(): Promise<YumiSign.Response<YumiSign.Profile>>;
+
+      /**
+       * Return a list of your current actions.
+       */
+      listActions(
+        params?: ProfileActionListParams
+      ): YumiSign.PaginatedListPromise<YumiSign.Action>;
 
       /**
        * Return a list of your signed envelopes.

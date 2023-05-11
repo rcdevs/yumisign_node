@@ -1,6 +1,8 @@
 declare module 'yumisign' {
   namespace YumiSign {
     namespace Envelope {
+      type Type = 'simple' | 'advanced' | 'qualified';
+
       /**
        * - "not_started": You can edit the envelope, add documents, place fields ...
        * - "stated": Signatures are requested (just wait completion)
@@ -34,6 +36,11 @@ declare module 'yumisign' {
       name: string;
 
       /**
+       * Type of the envelope
+       */
+      type: Envelope.Type;
+
+      /**
        * Status of the envelope.
        */
       status: Envelope.Status;
@@ -41,12 +48,22 @@ declare module 'yumisign' {
       /**
        * The creation date as timestamp.
        */
-      createDate: number;
+      createDate: number | undefined;
+
+      /**
+       * The expiration date as timestamp.
+       */
+      expiryDate: number;
 
       /**
        * List of documents in the envelope.
        */
       documents: Document[];
+
+      /**
+       * The envelope creator.
+       */
+      creator: Profile;
     }
   }
 }
