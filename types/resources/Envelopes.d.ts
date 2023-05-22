@@ -56,14 +56,19 @@ declare module 'yumisign' {
       expiryDate: number;
 
       /**
-       * List of documents in the envelope.
+       * The workspace identifier where the envelope is stored.
        */
-      documents: Document[];
+      workspaceId: number | undefined;
 
       /**
        * The envelope creator.
        */
-      creator: Profile;
+      creator: Profile | undefined;
+
+      /**
+       * List of documents in the envelope.
+       */
+      documents: Document[];
     }
   }
 }

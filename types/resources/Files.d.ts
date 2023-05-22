@@ -7,6 +7,11 @@ declare module 'yumisign' {
       name: string;
 
       /**
+       * Format
+       */
+      format: string;
+
+      /**
        * The stored file uri.
        */
       uri: string;

@@ -2,6 +2,8 @@ declare module 'yumisign' {
   namespace YumiSign {
     namespace Action {
       type Type = Step.Type;
+
+      type Status = Envelope.Status;
     }
 
     interface Action {
@@ -14,6 +16,11 @@ declare module 'yumisign' {
        * The action type.
        */
       type: Action.Type;
+
+      /**
+       * The action status.
+       */
+      status: Action.Status;
 
       /**
        * The envelope associated to the action.
