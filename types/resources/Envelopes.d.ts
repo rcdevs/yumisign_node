@@ -5,13 +5,13 @@ declare module 'yumisign' {
 
       /**
        * - "not_started": You can edit the envelope, add documents, place fields ...
-       * - "stated": Signatures are requested (just wait completion)
+       * - "started": Signatures are requested (just wait recipients responses)
        * - "approved": All signatures are made (just wait completion)
-       * - "declined": At least on signature has been declined
+       * - "declined": At least one signature has been declined
        * - "canceled": You have canceled the envelope
        * - "expired": At least one signature is missing after the expiration date
-       * - "to_be_archived": Envelope is automatically archived after approved
-       * - "signed": Envelope is archived
+       * - "signed": Envelope is archived, you can find it in your documents
+       * - "blocked": Envelope is blocked, need to process unblocking action(s)
        */
       type Status =
         | 'not_started'
@@ -20,8 +20,8 @@ declare module 'yumisign' {
         | 'declined'
         | 'canceled'
         | 'expired'
-        | 'to_be_archived'
-        | 'signed';
+        | 'signed'
+        | 'blocked';
     }
 
     interface Envelope {
