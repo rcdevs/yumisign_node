@@ -43,13 +43,13 @@ type YumiSignOAuthTokenStore = {
 
 type YumiSignObjectConfig = {
   baseUri?: string;
-  clientId: string;
-  clientSecret: string;
+  clientId?: string;
+  clientSecret?: string;
   oAuthTokenStore?: YumiSignOAuthTokenStore;
 };
 
 type YumiSignConstructor = {
-  new (config: YumiSignObjectConfig): YumiSignObject;
+  new (config?: YumiSignObjectConfig): YumiSignObject;
 };
 
 declare const YumiSign: YumiSignConstructor;

@@ -116,12 +116,12 @@ declare module 'yumisign' {
     /**
      * The client id of the YumiSign application that you'd like to connect the account from.
      */
-    clientId: string;
+    clientId?: string;
 
     /**
      * The client secret of the YumiSign application that you'd like to connect the account from.
      */
-    clientSecret: string;
+    clientSecret?: string;
 
     /**
      * The oauth token store for retrieve token on mount and change it on refresh.
@@ -132,7 +132,7 @@ declare module 'yumisign' {
   export class YumiSign {
     static YumiSign: typeof YumiSign;
 
-    constructor(config: YumiSignConfig);
+    constructor(config?: YumiSignConfig);
 
     errors: typeof YumiSign.Errors;
     webhooks: YumiSign.Webhooks;
