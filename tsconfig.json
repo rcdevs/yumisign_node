@@ -1,15 +1,11 @@
 {
+  "extends": "./tsconfig.cjs.json",
   "compilerOptions": {
-    "outDir": "./lib",
-    "allowJs": true,
-    "target": "es2017",
-    "module": "commonjs",
-    "checkJs": false,
-    "alwaysStrict": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "strict": true,
-    "strictFunctionTypes": true,
+    "noEmit": true,
+    "types": ["node"]
   },
-  "include": ["./src/**/*"]
+  "ts-node": {
+    "experimentalResolver": true
+  },
+  "include": ["src/**/*.ts"]
 }

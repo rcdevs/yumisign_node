@@ -49,6 +49,19 @@ declare module 'yumisign' {
        * Must be between now and 90 days. Default 7 days.
        */
       expiryDate?: number;
+
+      /**
+       * A list af custom configuration for the envelope.
+       */
+      preferences?: {
+        name: Preference.Name;
+        value: string | number;
+      }[];
+
+      /**
+       * Set of key-value pairs that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
+       */
+      metadata: MetadataParam;
     }
 
     interface EnvelopeAddDocumentParams {

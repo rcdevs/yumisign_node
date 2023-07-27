@@ -8,7 +8,7 @@
     "api"
   ],
   "homepage": "https://github.com/rcdevs/yumisign_node",
-  "author": "YumiSign",
+  "author": "RCDevs Identity SA",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rcdevs/yumisign_node.git"
@@ -19,8 +19,8 @@
   "engines": {
     "node": ">=12.*"
   },
-  "main": "lib/yumisign.js",
-  "types": "types/yumisign.d.js",
+  "main": "cjs/yumisign.cjs.node.js",
+  "types": "types/index.d.js",
   "devDependencies": {
     "@types/chai": "^4.3.4",
     "@types/chai-as-promised": "^7.1.5",
@@ -48,16 +48,27 @@
   },
   "license": "MIT",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf ./node_modules/.cache ./lib",
+    "build": "npm run build-esm && npm run build-cjs",
+    "build-esm": "mkdir -p esm && tsc -p tsconfig.esm.json && echo '{\"type\":\"module\"}' > esm/package.json",
+    "build-cjs": "mkdir -p cjs && tsc -p tsconfig.cjs.json && echo '{\"type\":\"commonjs\"}' > cjs/package.json",
+    "clean": "rm -rf ./node_modules/.cache ./esm ./cjs",
     "prepack": "npm install && npm run build",
     "lint": "eslint --ext .js,.jsx,.ts .",
     "fix": "eslint --ext .js,.jsx,.ts . --fix"
   },
   "exports": {
-    "types": "./types/yumisign.d.ts",
-    "browser": "./lib/yumisign.js",
-    "worker": "./lib/yumisign.js",
-    "default": "./lib/yumisign.js"
+    "types": "./types/index.d.ts",
+    "browser": {
+      "import": "./esm/yumisign.esm.worker.js",
+      "require": "./cjs/yumisign.cjs.worker.js"
+    },
+    "worker": {
+      "import": "./esm/yumisign.esm.worker.js",
+      "require": "./cjs/yumisign.cjs.worker.js"
+    },
+    "default": {
+      "import": "./esm/yumisign.esm.node.js",
+      "require": "./cjs/yumisign.cjs.node.js"
+    }
   }
 }

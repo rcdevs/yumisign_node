@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.cjs.json",
+  "compilerOptions": {
+    "outDir": "./esm",
+    "module": "es2022",
+  },
+  "exclude": ["./src/yumisign.cjs.node.ts", "./src/yumisign.cjs.worker.ts"],
+}

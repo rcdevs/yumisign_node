@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "outDir": "./cjs",
+    "module": "commonjs",
+    "target": "es2017",
+    "checkJs": false,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strict": true,
+    "strictFunctionTypes": true,
+    "types": ["node"],
+    "esModuleInterop": true
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["./src/yumisign.esm.node.ts", "./src/yumisign.esm.worker.ts"],
+}
