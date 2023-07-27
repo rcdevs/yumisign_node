@@ -5,5 +5,6 @@
 !/README.md
 !/AUTHENTICATION.md
 !/package.json
-!/lib/**/*
+!/cjs/**/*
+!/esm/**/*
 !/types/**/*
