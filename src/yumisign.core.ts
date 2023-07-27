@@ -3,10 +3,10 @@
 ///<reference path='../types/index.d.ts' />
 import * as errors from './Errors.js';
 import * as resources from './resources.js';
-import PlatformFunctions from './platforms/PlatformFunctions.js';
-import createWebhooks from './Webhooks.js';
+import {PlatformFunctions} from './platforms/PlatformFunctions.js';
+import {createWebhooks} from './Webhooks.js';
 
-export default function createYumiSign(
+export function createYumiSign(
   platformFunctions: PlatformFunctions
 ): typeof YumiSign {
   function YumiSign(this: YumiSignObject, config: YumiSignObjectConfig): void {

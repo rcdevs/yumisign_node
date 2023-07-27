@@ -22,16 +22,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createYumiSign = void 0;
 /* eslint-disable camelcase */
 // eslint-disable-next-line spaced-comment
 ///<reference path='../types/index.d.ts' />
 const errors = __importStar(require("./Errors.js"));
 const resources = __importStar(require("./resources.js"));
-const Webhooks_js_1 = __importDefault(require("./Webhooks.js"));
+const Webhooks_js_1 = require("./Webhooks.js");
 function createYumiSign(platformFunctions) {
     function YumiSign(config) {
         if (!(this instanceof YumiSign)) {
@@ -39,11 +37,11 @@ function createYumiSign(platformFunctions) {
         }
         this._config = config;
         this.errors = errors;
-        this.webhooks = (0, Webhooks_js_1.default)(platformFunctions);
+        this.webhooks = (0, Webhooks_js_1.createWebhooks)(platformFunctions);
         this._bindResources();
     }
     YumiSign.errors = errors;
-    YumiSign.webhooks = Webhooks_js_1.default;
+    YumiSign.webhooks = Webhooks_js_1.createWebhooks;
     YumiSign.prototype = {
         getBaseUri() {
             var _a;
@@ -126,4 +124,4 @@ function createYumiSign(platformFunctions) {
     };
     return YumiSign;
 }
-exports.default = createYumiSign;
+exports.createYumiSign = createYumiSign;

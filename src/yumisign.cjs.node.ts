@@ -1,5 +1,5 @@
-import NodePlatformFunctions from './platforms/NodePlatformFunctions.js';
-import createYumiSign from './yumisign.core.js';
+import {NodePlatformFunctions} from './platforms/NodePlatformFunctions.js';
+import {createYumiSign} from './yumisign.core.js';
 
 const YumiSign = createYumiSign(new NodePlatformFunctions());
 

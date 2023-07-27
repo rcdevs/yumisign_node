@@ -1,5 +1,5 @@
 import { YumiSignWebhookSignatureVerificationError } from './Errors.js';
-export default function createWebhooks(platformFunctions) {
+export function createWebhooks(platformFunctions) {
     function parseHeader(header) {
         return header.split(',').reduce((acc, item) => {
             const kv = item.split('=');

@@ -3,10 +3,10 @@ import {
   YumiSignError,
   YumiSignPermissionError,
 } from './Errors.js';
-import proto from './utils/proto.js';
+import {extend} from './utils/proto.js';
 
 // Provide extension mechanism for YumiSign Resource Sub-Classes
-YumiSignResource.extend = proto.extend;
+YumiSignResource.extend = extend;
 
 function YumiSignResource(
   this: YumiSignResourceObject,

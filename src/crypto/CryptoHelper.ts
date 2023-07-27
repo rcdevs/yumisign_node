@@ -1,4 +1,4 @@
-export default class CryptoHelper {
+export class CryptoHelper {
   computeHmacSignature(payload: string, secret: string): string {
     throw new Error('computeHmacSignature not implemented.');
   }

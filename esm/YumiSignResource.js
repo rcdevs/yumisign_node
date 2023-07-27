@@ -10,9 +10,9 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 import { YumiSignAuthenticationError, YumiSignError, YumiSignPermissionError, } from './Errors.js';
-import proto from './utils/proto.js';
+import { extend } from './utils/proto.js';
 // Provide extension mechanism for YumiSign Resource Sub-Classes
-YumiSignResource.extend = proto.extend;
+YumiSignResource.extend = extend;
 function YumiSignResource(yumisign) {
     this._yumisign = yumisign;
     this.publicUri = this.publicUri || false;

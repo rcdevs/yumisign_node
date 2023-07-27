@@ -1,7 +1,7 @@
-import PlatformFunctions from './platforms/PlatformFunctions.js';
+import {PlatformFunctions} from './platforms/PlatformFunctions.js';
 import {YumiSignWebhookSignatureVerificationError} from './Errors.js';
 
-export default function createWebhooks(
+export function createWebhooks(
   platformFunctions: PlatformFunctions
 ): YumiSignWebhookObject {
   function parseHeader(header: string): {timestamp: number; signature: string} {

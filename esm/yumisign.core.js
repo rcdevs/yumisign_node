@@ -3,8 +3,8 @@
 ///<reference path='../types/index.d.ts' />
 import * as errors from './Errors.js';
 import * as resources from './resources.js';
-import createWebhooks from './Webhooks.js';
-export default function createYumiSign(platformFunctions) {
+import { createWebhooks } from './Webhooks.js';
+export function createYumiSign(platformFunctions) {
     function YumiSign(config) {
         if (!(this instanceof YumiSign)) {
             return new YumiSign(config);

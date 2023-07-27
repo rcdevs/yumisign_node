@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createWebhooks = void 0;
 const Errors_js_1 = require("./Errors.js");
 function createWebhooks(platformFunctions) {
     function parseHeader(header) {
@@ -64,4 +65,4 @@ function createWebhooks(platformFunctions) {
         verifySignature,
     };
 }
-exports.default = createWebhooks;
+exports.createWebhooks = createWebhooks;

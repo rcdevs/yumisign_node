@@ -10,15 +10,12 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.YumiSignResource = void 0;
 const Errors_js_1 = require("./Errors.js");
-const proto_js_1 = __importDefault(require("./utils/proto.js"));
+const proto_js_1 = require("./utils/proto.js");
 // Provide extension mechanism for YumiSign Resource Sub-Classes
-YumiSignResource.extend = proto_js_1.default.extend;
+YumiSignResource.extend = proto_js_1.extend;
 function YumiSignResource(yumisign) {
     this._yumisign = yumisign;
     this.publicUri = this.publicUri || false;
