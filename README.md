@@ -12,7 +12,7 @@ Node 12 or higher.
 Install the package with:
 
 ```sh
-npm install yumisign git+https://github.com/rcdevs/yumisign_node --save
+npm install yumisign --save
 ```
 
 ## Usage
