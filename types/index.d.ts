@@ -12,6 +12,8 @@
 ///<reference path='./resources/Profile.d.ts' />
 ///<reference path='./resources/ProfileResource.d.ts' />
 ///<reference path='./resources/Steps.d.ts' />
+///<reference path='./resources/Templates.d.ts' />
+///<reference path='./resources/TemplatesResource.d.ts' />
 ///<reference path='./resources/Workspaces.d.ts' />
 ///<reference path='./resources/WorkspacesResource.d.ts' />
 
@@ -140,6 +142,7 @@ declare module 'yumisign' {
     envelopes: YumiSign.EnvelopesResource;
     oauth: YumiSign.OAuthResource;
     profile: YumiSign.ProfileResource;
+    templates: YumiSign.TemplatesResource;
     workspaces: YumiSign.WorkspacesResource;
 
     getBaseUri(): string;
