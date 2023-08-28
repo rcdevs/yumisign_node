@@ -93,6 +93,47 @@ const event = yumisign.webhooks.constructEvent(
 );
 ```
 
+### Auto pagination
+
+Some lists return a paginated response that can be handled automatically.
+Usage depends on Node versions and styles.
+
+```js
+for await (const template of yumisign.templates.list().autoPagination) {
+  handle(template);
+  if (stop()) {
+    break;
+  }
+}
+```
+
+```js
+await yumisign.templates.list().autoPagination.each(async (template) => {
+  await handle(template);
+  if (stop()) {
+    return false;
+  }
+});
+```
+
+```js
+yumisign.templates.list().autoPagination.each((template) =>
+  handle(template).then(() => {
+    if (stop()) {
+      return false;
+    }
+  })
+);
+```
+
+For some cases if you expect a small number of items, you can directly retrieve items as array.
+By default, the `limit` is fixed to 1000 items and cannot be greater.
+You can specify a different limit as an option.
+
+```js
+const templates = await yumisign.templates.list().autoPagination.toArray({ limit: 1000 });
+```
+
 ## Configuration
 
 The package can be initialized with several configurations:

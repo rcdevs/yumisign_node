@@ -1,6 +1,7 @@
 import {transformEnvelope, transformTemplate} from '../utils/transformer.js';
 import YumiSign from 'yumisign';
 import {YumiSignResource} from '../YumiSignResource.js';
+import {makeAutoPaginatePromise} from '../utils/pagination.js';
 
 export const Templates = YumiSignResource.extend({
   resourcePath: '',
@@ -19,28 +20,41 @@ export const Templates = YumiSignResource.extend({
     workspaceId: number,
     params?: YumiSign.TemplateListParams
   ): YumiSign.PaginatedListPromise<YumiSign.Template> {
-    let endpoint = `/workspaces/${workspaceId}/templates`;
-    if (params) {
-      const urlSearchParams = new URLSearchParams();
-      Object.entries(params).forEach(([key, value]) => {
-        urlSearchParams.append(key, value);
-      });
-      endpoint =
-        urlSearchParams.toString().length > 0
-          ? endpoint + `?${urlSearchParams.toString()}`
-          : endpoint;
-    }
+    const list = (
+      params?: YumiSign.TemplateListParams
+    ): Promise<YumiSign.Response<
+      YumiSign.PaginatedList<YumiSign.Template>
+    >> => {
+      let endpoint = `/workspaces/${workspaceId}/templates`;
+      if (params) {
+        const urlSearchParams = new URLSearchParams();
+        Object.entries(params).forEach(([key, value]) => {
+          urlSearchParams.append(key, value);
+        });
+        endpoint =
+          urlSearchParams.toString().length > 0
+            ? endpoint + `?${urlSearchParams.toString()}`
+            : endpoint;
+      }
 
-    return this._makeRequest<YumiSign.PaginatedList<YumiSign.Template>>(
-      endpoint,
-      {method: 'GET'}
-    ).then((paginatedList) => {
-      const {items, ...rest} = paginatedList;
-      return {
-        items: items.map((item) => transformTemplate(item)),
-        ...rest,
-      };
-    });
+      return this._makeRequest<YumiSign.PaginatedList<YumiSign.Template>>(
+        endpoint,
+        {method: 'GET'}
+      ).then((paginatedList) => {
+        const {items, ...rest} = paginatedList;
+        return {
+          items: items.map((item) => transformTemplate(item)),
+          ...rest,
+        };
+      });
+    };
+
+    return makeAutoPaginatePromise<YumiSign.Template>(
+      list(params),
+      this,
+      list,
+      params
+    );
   },
 
   use(

@@ -117,3 +117,8 @@ type YumiSignWebhookObject = {
     receivedAt?: number
   ): boolean;
 };
+
+type YumiSignPaginationParams = {
+  limit: number;
+  page: number;
+};

@@ -55,8 +55,7 @@ declare module 'yumisign' {
       };
     }
 
-    interface BulkPromise<T>
-      extends Promise<YumiSign.Response<BulkItem<T>[]>> {}
+    interface BulkPromise<T> extends Promise<Response<BulkItem<T>[]>> {}
 
     /**
      * A container for paginated lists of objects.
@@ -68,8 +67,17 @@ declare module 'yumisign' {
       items: Array<T>;
     }
 
+    interface AutoPagination<T> extends AsyncIterableIterator<T> {
+      each(
+        handler: (item: T) => boolean | void | Promise<boolean | void>
+      ): Promise<void>;
+      toArray(options?: {limit?: number}): Promise<Array<T>>;
+    }
+
     interface PaginatedListPromise<T>
-      extends Promise<YumiSign.Response<PaginatedList<T>>> {}
+      extends Promise<Response<PaginatedList<T>>> {
+      autoPagination: AutoPagination<T>;
+    }
 
     interface PaginationParams {
       /**
