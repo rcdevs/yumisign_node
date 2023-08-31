@@ -1,4 +1,4 @@
-import {transformEnvelope, transformTemplate} from '../utils/transformer.js';
+import {toEnvelope, toTemplate} from '../utils/converter.js';
 import YumiSign from 'yumisign';
 import {YumiSignResource} from '../YumiSignResource.js';
 import {makeAutoPaginatePromise} from '../utils/pagination.js';
@@ -13,7 +13,7 @@ export const Templates = YumiSignResource.extend({
     return this._makeRequest<YumiSign.Template>(
       `/workspaces/${workspaceId}/templates/${id}`,
       {method: 'GET'}
-    ).then((template) => transformTemplate(template));
+    ).then((template) => toTemplate(template));
   },
 
   list(
@@ -43,7 +43,7 @@ export const Templates = YumiSignResource.extend({
       ).then((paginatedList) => {
         const {items, ...rest} = paginatedList;
         return {
-          items: items.map((item) => transformTemplate(item)),
+          items: items.map((item) => toTemplate(item)),
           ...rest,
         };
       });
@@ -68,6 +68,6 @@ export const Templates = YumiSignResource.extend({
         headers: {'Content-Type': 'application/json'},
         body: params ? JSON.stringify(params) : '{}',
       }
-    ).then((envelope) => transformEnvelope(envelope));
+    ).then((envelope) => toEnvelope(envelope));
   },
 } as YumiSign.TemplatesResource);

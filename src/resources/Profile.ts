@@ -1,4 +1,4 @@
-import {transformAction, transformEnvelope} from '../utils/transformer.js';
+import {toAction, toEnvelope} from '../utils/converter.js';
 import YumiSign from 'yumisign';
 import {YumiSignResource} from '../YumiSignResource.js';
 import {makeAutoPaginatePromise} from '../utils/pagination.js';
@@ -34,7 +34,7 @@ export const Profile = YumiSignResource.extend({
       ).then((paginatedList) => {
         const {items, ...rest} = paginatedList;
         return {
-          items: items.map((item) => transformAction(item)),
+          items: items.map((item) => toAction(item)),
           ...rest,
         };
       });
@@ -74,7 +74,7 @@ export const Profile = YumiSignResource.extend({
       ).then((paginatedList) => {
         const {items, ...rest} = paginatedList;
         return {
-          items: items.map((item) => transformEnvelope(item)),
+          items: items.map((item) => toEnvelope(item)),
           ...rest,
         };
       });

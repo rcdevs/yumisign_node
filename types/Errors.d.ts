@@ -4,7 +4,6 @@ declare module 'yumisign' {
       message: string;
       code?: string;
       statusCode?: number;
-      violations?: {[key: string]: string};
     };
 
     namespace Errors {
@@ -34,22 +33,18 @@ declare module 'yumisign' {
          */
         readonly statusCode?: number;
 
-        /**
-         * List of request data violations.
-         */
-        readonly violations?: {[key: string]: string};
-
         constructor(raw: YumiSignRawError);
 
         static generate(
           raw: YumiSignRawError & {code: 'AUTHENTICATION_REQUIRED'}
         ): YumiSignAuthenticationError;
         static generate(
-          raw: YumiSignRawError & {code: 'VALIDATION_ERROR'}
+          raw: YumiSignRawError & {
+            code: 'VALIDATION_ERROR';
+            violations?: {[key: string]: string};
+          }
         ): YumiSignValidationError;
-        static generate(
-          rawError: YumiSignRawError & {code: string}
-        ): YumiSignError;
+        static generate(raw: YumiSignRawError & {code: string}): YumiSignError;
       }
 
       /**
@@ -73,6 +68,10 @@ declare module 'yumisign' {
       class YumiSignValidationError extends YumiSignError {
         readonly type: 'YumiSignAuthenticationError';
         readonly code: 'VALIDATION_ERROR';
+        /**
+         * List of request data violations.
+         */
+        readonly violations?: {[key: string]: string};
       }
 
       /**

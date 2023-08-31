@@ -116,6 +116,7 @@ export const OAuth = YumiSignResource.extend({
     return new Promise((resolve, reject) => {
       const delValue = this._yumisign._getOAuthTokenStore().del();
       if (typeof delValue === 'undefined') {
+        this._yumisign._delOAuthToken();
         resolve(undefined);
       } else {
         Promise.resolve(delValue)

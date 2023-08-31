@@ -2,10 +2,10 @@
   "extends": "./tsconfig.cjs.json",
   "compilerOptions": {
     "noEmit": true,
-    "types": ["node"]
+    "types": ["node", "mocha"]
   },
   "ts-node": {
     "experimentalResolver": true
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "test/**/*.ts"]
 }

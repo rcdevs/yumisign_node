@@ -27,11 +27,8 @@ YumiSignResource.prototype = {
 
   initialize(): void {},
 
-  _makeRequest(
-    endpoint: string,
-    init: RequestInit
-  ): Promise<YumiSignResponse<any>> {
-    const uri = endpoint.startsWith('http')
+  _createUri(endpoint: string): string {
+    return endpoint.startsWith('http')
       ? endpoint
       : [
           this._yumisign.getBaseUri(),
@@ -39,6 +36,31 @@ YumiSignResource.prototype = {
           this.resourcePath,
           endpoint,
         ].join('');
+  },
+
+  _addAuthorizationHeader(
+    init: RequestInit,
+    oAuthToken: YumiSignOAuthToken
+  ): RequestInit {
+    const {headers, ...restInit} = init;
+    return {
+      headers: {
+        ...(headers || ({} as Record<string, any>)),
+        Authorization: `${oAuthToken.token_type} ${oAuthToken.access_token}`,
+      },
+      ...restInit,
+    };
+  },
+
+  _request(uri: string, init: RequestInit): Promise<Response> {
+    return fetch(uri, init);
+  },
+
+  _makeRequest(
+    endpoint: string,
+    init: RequestInit
+  ): Promise<YumiSignResponse<any>> {
+    const uri = this._createUri(endpoint);
 
     const resolveResponse = (
       response: Response
@@ -86,23 +108,9 @@ YumiSignResource.prototype = {
       );
 
     if (!this.publicUri) {
-      const addAuthorizationHeader = (
-        init: RequestInit,
-        oAuthToken: YumiSignOAuthToken
-      ): RequestInit => {
-        const {headers, ...restInit} = init;
-        return {
-          headers: {
-            ...(headers || ({} as Record<string, any>)),
-            Authorization: `${oAuthToken.token_type} ${oAuthToken.access_token}`,
-          },
-          ...restInit,
-        };
-      };
-
-      return fetch(
+      return this._request(
         uri,
-        addAuthorizationHeader(init, this._yumisign._getOAuthToken())
+        this._addAuthorizationHeader(init, this._yumisign._getOAuthToken())
       )
         .then((response) => {
           if (response.status === 401) {
@@ -113,7 +121,10 @@ YumiSignResource.prototype = {
               .then(() =>
                 fetch(
                   uri,
-                  addAuthorizationHeader(init, this._yumisign._getOAuthToken())
+                  this._addAuthorizationHeader(
+                    init,
+                    this._yumisign._getOAuthToken()
+                  )
                 ).then((retryResponse) => {
                   if (retryResponse.status === 401) {
                     return this._yumisign.oauth
@@ -134,7 +145,7 @@ YumiSignResource.prototype = {
         .catch((error) => rejectError(error));
     }
 
-    return fetch(uri, init)
+    return this._request(uri, init)
       .then((response) => resolveResponse(response))
       .catch((error) => rejectError(error));
   },

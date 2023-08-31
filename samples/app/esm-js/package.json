@@ -1,0 +1,21 @@
+{
+  "name": "yumisign-sample-app-esm-js",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "YumiSign sample for javascript ecmascript module app",
+  "author": "RCDevs Identity SA",
+  "repository": {},
+  "main": "./index.js",
+  "scripts": {
+    "run": "node index.js",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "eslint": "^8.33.0",
+    "eslint-plugin-import": "^2.28.1"
+  },
+  "dependencies": {
+    "yumisign": "file:../../.."
+  },
+  "license": "ISC"
+}

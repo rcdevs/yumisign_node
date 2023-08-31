@@ -93,6 +93,12 @@ type YumiSignResourceObject = {
   basePath: string;
   resourcePath: string;
   initialize: (...args: Array<any>) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
+  _createUri(endpoint: string): string;
+  _addAuthorizationHeader(
+    init: RequestInit,
+    oAuthToken: YumiSignOAuthToken
+  ): RequestInit;
+  _request(uri: string, init: RequestInit): Promise<Response>;
   _makeRequest(
     endpoint: string,
     init: RequestInit

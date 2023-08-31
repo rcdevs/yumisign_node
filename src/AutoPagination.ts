@@ -50,7 +50,7 @@ class YumiSignAutoPaginationIterator<T> implements AsyncIterator<T> {
     }
 
     this.index = 0;
-    this.page = requestParams?.page || 1;
+    this.page = requestParams?.page ?? 1;
     this.yumisignResource = yumisignResource;
     this.pagePromise = startPagePromise;
     this.cachedPromise = {current: null};

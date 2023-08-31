@@ -5,7 +5,6 @@ export class YumiSignError extends Error {
 
   readonly code?: string;
   readonly statusCode?: number;
-  readonly violations?: {[key: string]: string};
 
   constructor(raw: YumiSignRawError = {message: 'Unknown error'}) {
     super(raw.message);
@@ -16,7 +15,6 @@ export class YumiSignError extends Error {
     this.raw = raw;
     this.code = raw.code;
     this.statusCode = raw.statusCode;
-    this.violations = raw.violations;
   }
 
   static generate(raw: YumiSignRawError): YumiSignError {
@@ -35,7 +33,15 @@ export class YumiSignAuthenticationError extends YumiSignError {}
 
 export class YumiSignPermissionError extends YumiSignError {}
 
-export class YumiSignValidationError extends YumiSignError {}
+export class YumiSignValidationError extends YumiSignError {
+  readonly violations?: {[key: string]: string};
+
+  constructor(raw: YumiSignRawError = {message: 'Validation error'}) {
+    super(raw);
+
+    this.violations = raw.violations;
+  }
+}
 
 export class YumiSignWebhookSignatureVerificationError extends YumiSignError {
   header: string | Uint8Array;
@@ -44,7 +50,7 @@ export class YumiSignWebhookSignatureVerificationError extends YumiSignError {
   constructor(
     header: string | Uint8Array,
     payload: string | Uint8Array,
-    raw: YumiSignRawError
+    raw: YumiSignRawError = {message: 'Webhook signature verification error'}
   ) {
     super(raw);
 

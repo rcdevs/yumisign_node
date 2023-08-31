@@ -1,0 +1,21 @@
+{
+  "name": "yumisign-sample-webhook-client-test",
+  "version": "1.0.0",
+  "description": "YumiSign sample for test webhook signing server",
+  "author": "RCDevs Identity SA",
+  "repository": {},
+  "main": "./index.ts",
+  "scripts": {
+    "run": "ts-node-transpile-only ./index.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^13.1.4",
+    "eslint": "^8.33.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0"
+  },
+  "license": "ISC"
+}

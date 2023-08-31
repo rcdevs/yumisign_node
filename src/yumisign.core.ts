@@ -1,10 +1,17 @@
 /* eslint-disable camelcase */
 // eslint-disable-next-line spaced-comment
 ///<reference path='../types/index.d.ts' />
-import * as errors from './Errors.js';
+import * as Errors from './Errors.js';
 import * as resources from './resources.js';
 import {PlatformFunctions} from './platforms/PlatformFunctions.js';
 import {createWebhooks} from './Webhooks.js';
+
+const ALLOWED_CONFIGURATIONS: string[] = [
+  'clientId',
+  'clientSecret',
+  'baseUri',
+  'oAuthTokenStore',
+];
 
 export function createYumiSign(
   platformFunctions: PlatformFunctions
@@ -14,15 +21,27 @@ export function createYumiSign(
       return new (YumiSign as any)(config);
     }
 
+    if (
+      Object.keys(config || {}).filter(
+        (value) => !ALLOWED_CONFIGURATIONS.includes(value)
+      ).length > 0
+    ) {
+      throw new Error(
+        `YumiSign Node: Configuration may only contain the properties: ${ALLOWED_CONFIGURATIONS.join(
+          ', '
+        )}.`
+      );
+    }
+
     this._config = config || {};
 
-    this.errors = errors;
+    this.errors = Errors;
     this.webhooks = createWebhooks(platformFunctions);
 
     this._bindResources();
   }
 
-  YumiSign.errors = errors;
+  YumiSign.errors = Errors;
   YumiSign.webhooks = createWebhooks;
 
   YumiSign.prototype = {

@@ -274,5 +274,11 @@ module.exports = {
         'prefer-rest-params': 'off',
       },
     },
+    {
+      files: ['test/**/*.ts'],
+      rules: {
+        '@typescript-eslint/explicit-function-return-type': 'off',
+      },
+    },
   ],
 };

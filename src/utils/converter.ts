@@ -18,7 +18,7 @@ interface ApiTemplate
   recipients?: any[];
 }
 
-export function transformEnvelope<
+export function toEnvelope<
   T extends
     | YumiSign.Response<YumiSign.Envelope | ApiWorkflow | ApiArchive>
     | YumiSign.Envelope
@@ -31,17 +31,17 @@ export function transformEnvelope<
   return {...envelope, id, creator};
 }
 
-export function transformAction<
+export function toAction<
   T extends
     | YumiSign.Response<YumiSign.Action | ApiAction>
     | YumiSign.Action
     | ApiAction
 >(action: T): T {
   const envelope = 'envelope' in action ? action.envelope : action.workflow;
-  return {...action, envelope: transformEnvelope(envelope)};
+  return {...action, envelope: toEnvelope(envelope)};
 }
 
-export function transformTemplate<
+export function toTemplate<
   T extends
     | YumiSign.Response<YumiSign.Template | ApiTemplate>
     | YumiSign.Template

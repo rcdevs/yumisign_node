@@ -1,6 +1,6 @@
 import YumiSign from 'yumisign';
 import {YumiSignResource} from '../YumiSignResource.js';
-import {transformEnvelope} from '../utils/transformer.js';
+import {toEnvelope} from '../utils/converter.js';
 
 export const Envelopes = YumiSignResource.extend({
   resourcePath: '/envelopes',
@@ -12,7 +12,7 @@ export const Envelopes = YumiSignResource.extend({
     return this._makeRequest<YumiSign.Envelope>(
       `/${id}${params?.session ? '?session=1' : ''}`,
       {method: 'GET'}
-    ).then((envelope) => transformEnvelope(envelope));
+    ).then((envelope) => toEnvelope(envelope));
   },
 
   list(ids: string[]): Promise<YumiSign.BulkItem<YumiSign.Envelope>[]> {
@@ -23,7 +23,7 @@ export const Envelopes = YumiSignResource.extend({
       bulkItems.map((bulkItem) => {
         const {response, ...rest} = bulkItem;
         return {
-          response: response ? transformEnvelope(response) : response,
+          response: response ? toEnvelope(response) : response,
           ...rest,
         };
       })
@@ -73,7 +73,7 @@ export const Envelopes = YumiSignResource.extend({
     return this._makeRequest<YumiSign.Envelope>('', {
       method: 'POST',
       body,
-    }).then((envelope) => transformEnvelope(envelope));
+    }).then((envelope) => toEnvelope(envelope));
   },
 
   addDocument(
@@ -86,7 +86,7 @@ export const Envelopes = YumiSignResource.extend({
     return this._makeRequest<YumiSign.Envelope>(`/${id}/documents`, {
       method: 'POST',
       body,
-    }).then((envelope) => transformEnvelope(envelope));
+    }).then((envelope) => toEnvelope(envelope));
   },
 
   designerUri(
@@ -122,6 +122,6 @@ export const Envelopes = YumiSignResource.extend({
   start(id: string): Promise<YumiSign.Response<YumiSign.Envelope>> {
     return this._makeRequest<YumiSign.Envelope>(`/${id}/start`, {
       method: 'PUT',
-    }).then((envelope) => transformEnvelope(envelope));
+    }).then((envelope) => toEnvelope(envelope));
   },
 } as YumiSign.EnvelopesResource);
