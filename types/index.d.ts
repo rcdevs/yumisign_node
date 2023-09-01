@@ -75,9 +75,8 @@ declare module 'yumisign' {
     }
 
     interface PaginatedListPromise<T>
-      extends Promise<Response<PaginatedList<T>>> {
-      autoPagination: AutoPagination<T>;
-    }
+      extends Promise<Response<PaginatedList<T>>>,
+        AutoPagination<T> {}
 
     interface PaginationParams {
       /**

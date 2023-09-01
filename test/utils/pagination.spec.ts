@@ -27,11 +27,10 @@ describe('Pagination', () => {
         request
       );
 
-      expect(autoPaginatePromise.autoPagination).to.be.an('object');
-      expect(autoPaginatePromise.autoPagination.each).to.be.a('function');
-      expect(autoPaginatePromise.autoPagination.toArray).to.be.a('function');
-      expect(autoPaginatePromise.autoPagination.next).to.be.a('function');
-      expect(autoPaginatePromise.autoPagination.return).to.be.a('function');
+      expect(autoPaginatePromise.each).to.be.a('function');
+      expect(autoPaginatePromise.toArray).to.be.a('function');
+      expect(autoPaginatePromise.next).to.be.a('function');
+      expect(autoPaginatePromise.return).to.be.a('function');
     });
   });
 });

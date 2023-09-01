@@ -99,7 +99,7 @@ Some lists return a paginated response that can be handled automatically.
 Usage depends on Node versions and styles.
 
 ```js
-for await (const template of yumisign.templates.list().autoPagination) {
+for await (const template of yumisign.templates.list()) {
   handle(template);
   if (stop()) {
     break;
@@ -108,7 +108,7 @@ for await (const template of yumisign.templates.list().autoPagination) {
 ```
 
 ```js
-await yumisign.templates.list().autoPagination.each(async (template) => {
+await yumisign.templates.list().each(async (template) => {
   await handle(template);
   if (stop()) {
     return false;
@@ -117,7 +117,7 @@ await yumisign.templates.list().autoPagination.each(async (template) => {
 ```
 
 ```js
-yumisign.templates.list().autoPagination.each((template) =>
+yumisign.templates.list().each((template) =>
   handle(template).then(() => {
     if (stop()) {
       return false;
@@ -131,7 +131,7 @@ By default, the `limit` is fixed to 1000 items and cannot be greater.
 You can specify a different limit as an option.
 
 ```js
-const templates = await yumisign.templates.list().autoPagination.toArray({ limit: 1000 });
+const templates = await yumisign.templates.list().toArray({ limit: 1000 });
 ```
 
 ## Configuration

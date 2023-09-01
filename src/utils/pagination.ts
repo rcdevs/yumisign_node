@@ -9,12 +9,13 @@ export function makeAutoPaginatePromise<T>(
   ) => Promise<YumiSign.Response<YumiSign.PaginatedList<T>>>,
   requestParams?: YumiSign.PaginationParams
 ): YumiSign.PaginatedListPromise<T> {
-  return Object.assign(requestPromise, {
-    autoPagination: makeAutoPaginationMethods<T>(
+  return Object.assign(
+    requestPromise,
+    makeAutoPaginationMethods<T>(
       (resource as unknown) as YumiSignResourceObject,
       requestPromise,
       request,
       requestParams as YumiSignPaginationParams
-    ),
-  }) as YumiSign.PaginatedListPromise<T>;
+    )
+  ) as YumiSign.PaginatedListPromise<T>;
 }
