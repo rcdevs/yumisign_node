@@ -82,7 +82,13 @@ export function mockResource<T>(
         lastRequest.headers = init.headers;
       }
       if (init.body) {
-        lastRequest.body = init.body;
+        if (init.body instanceof FormData) {
+          const body: Record<string, unknown> = {};
+          init.body.forEach((value, key) => (body[key] = value));
+          lastRequest.body = body;
+        } else {
+          lastRequest.body = init.body;
+        }
       }
 
       yumisign.LAST_REQUEST = lastRequest;

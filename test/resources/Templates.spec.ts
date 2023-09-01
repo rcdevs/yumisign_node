@@ -43,12 +43,13 @@ describe('Templates resource', () => {
         items: [{id: 1}, {id: 2}],
       }
     );
+    const params: YumiSign.TemplateListParams = {page: 1, limit: 10};
 
     it('Sends the correct request', async () => {
-      await templatesResource.list(1);
+      await templatesResource.list(1, params);
       expect(yumisign.LAST_REQUEST).to.deep.equal({
         method: 'GET',
-        url: '/api/v1/workspaces/1/templates',
+        url: '/api/v1/workspaces/1/templates?page=1&limit=10',
         headers: {
           Authorization: `Bearer ${TEST_ACCESS_TOKEN}`,
         },
@@ -56,7 +57,7 @@ describe('Templates resource', () => {
     });
 
     it('Should return paginated templates', async () => {
-      const templates = await templatesResource.list(1);
+      const templates = await templatesResource.list(1, params);
       expect(templates.items).to.have.lengthOf(2);
       expect(templates.items[0].id).to.equal(1);
       expect(templates.items[1].id).to.equal(2);
@@ -69,7 +70,7 @@ describe('Templates resource', () => {
       Templates,
       {id: 'env_1'}
     );
-    const params = {
+    const params: YumiSign.TemplateUseParams = {
       name: 'tpl_name',
       recipients: [
         {name: 'rcp_name_1', email: 'rcp_email_1'},

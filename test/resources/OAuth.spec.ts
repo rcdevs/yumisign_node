@@ -71,7 +71,10 @@ describe('OAuth resource', () => {
         token_type: 'Bearer',
       }
     );
-    const params = {redirectUri: 'test_redirect_uri', code: 'test_code'};
+    const params: YumiSign.OAuthAccessParams = {
+      redirectUri: 'test_redirect_uri',
+      code: 'test_code',
+    };
     const oAuthToken = yumisign._oAuthToken;
     const storedOAuthToken = yumisign.STORED_OAUTH_TOKEN;
 
@@ -121,7 +124,9 @@ describe('OAuth resource', () => {
         token_type: 'Bearer',
       }
     );
-    const params = {refreshToken: TEST_REFRESH_TOKEN};
+    const params: YumiSign.OAuthRefreshParams = {
+      refreshToken: TEST_REFRESH_TOKEN,
+    };
     const oAuthToken = yumisign._oAuthToken;
     const storedOAuthToken = yumisign.STORED_OAUTH_TOKEN;
 

@@ -46,12 +46,13 @@ describe('Profile resource', () => {
         ],
       }
     );
+    const params: YumiSign.ProfileActionListParams = {page: 1, limit: 10};
 
     it('Sends the correct request', async () => {
-      await profileResource.listActions();
+      await profileResource.listActions(params);
       expect(yumisign.LAST_REQUEST).to.deep.equal({
         method: 'GET',
-        url: '/api/v1/profile/actions',
+        url: '/api/v1/profile/actions?page=1&limit=10',
         headers: {
           Authorization: `Bearer ${TEST_ACCESS_TOKEN}`,
         },
@@ -59,7 +60,7 @@ describe('Profile resource', () => {
     });
 
     it('Should return paginated actions', async () => {
-      const actions = await profileResource.listActions();
+      const actions = await profileResource.listActions(params);
       expect(actions.items).to.have.lengthOf(2);
       expect(actions.items[0].id).to.equal(1);
       expect(actions.items[1].id).to.equal(2);
@@ -77,12 +78,16 @@ describe('Profile resource', () => {
         items: [{id: 1}, {id: 2}],
       }
     );
+    const params: YumiSign.ProfileSignedEnvelopeListParams = {
+      page: 1,
+      limit: 10,
+    };
 
     it('Sends the correct request', async () => {
-      await profileResource.listSignedEnvelopes();
+      await profileResource.listSignedEnvelopes(params);
       expect(yumisign.LAST_REQUEST).to.deep.equal({
         method: 'GET',
-        url: '/api/v1/profile/signed-envelopes',
+        url: '/api/v1/profile/signed-envelopes?page=1&limit=10',
         headers: {
           Authorization: `Bearer ${TEST_ACCESS_TOKEN}`,
         },
@@ -90,7 +95,7 @@ describe('Profile resource', () => {
     });
 
     it('Should return paginated envelopes', async () => {
-      const envelopes = await profileResource.listSignedEnvelopes();
+      const envelopes = await profileResource.listSignedEnvelopes(params);
       expect(envelopes.items).to.have.lengthOf(2);
       expect(envelopes.items[0].id).to.equal(1);
       expect(envelopes.items[1].id).to.equal(2);

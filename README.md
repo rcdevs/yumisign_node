@@ -1,8 +1,9 @@
 # YumiSign Library
 
 [![Version](https://img.shields.io/npm/v/yumisign.svg)](https://www.npmjs.org/package/yumisign)
-[![Build](https://github.com/rcdevs/yumisign_node/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/rcdevs/yumisign_node/actions/workflows/main.yml?query=branch%3Amaster)
 [![Try on RunKit](https://badge.runkitcdn.com/yumisign.svg)](https://runkit.com/npm/yumisign)
+[![Build](https://github.com/rcdevs/yumisign_node/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/rcdevs/yumisign_node/actions/workflows/main.yml?query=branch%3Amaster)
+[![Coverage](https://coveralls.io/repos/github/rcdevs/yumisign_node/badge.svg?branch=master)](https://coveralls.io/github/rcdevs/yumisign_node?branch=master)
 
 The YumiSign Node library provides convenient access to the YumiSign API from
 applications written in JavaScript.

@@ -126,7 +126,7 @@ describe('YumiSign', () => {
   });
 
   describe('_getOAuthTokenStore', () => {
-    it('Should delete the oAuth token', () => {
+    it('Should return the oAuth token store', () => {
       const yumisign = YumiSign();
       expect(yumisign._getOAuthTokenStore()).to.have.keys([
         'get',

@@ -38,6 +38,20 @@ describe('Auto pagination', () => {
     );
   };
 
+  it('Should trow an error when the limit is greater than 100', () => {
+    const pages = [['env_1', 'env_2'], ['env_3', 'env_4'], ['env_5']];
+    return expect(
+      new Promise((resolve, reject) => {
+        try {
+          mockPagination(pages, {limit: 101});
+        } catch (err) {
+          resolve((err as Error).message);
+        }
+        reject(new Error('Expected error is not throw'));
+      })
+    ).to.eventually.match(/You cannot specify a limit of more than 100 items/);
+  });
+
   describe('each', () => {
     it('Should iterate properly when return false to break', () => {
       const pages = [['env_1', 'env_2'], ['env_3', 'env_4'], ['env_5']];

@@ -65,6 +65,7 @@ export const Envelopes = YumiSignResource.extend({
       Object.keys(params.metadata).forEach((metadataKey) => {
         body.append(
           `metadata[${metadataKey}]`,
+          // @ts-ignore
           String(params.metadata[metadataKey])
         );
       });

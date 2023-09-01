@@ -55,6 +55,19 @@ jobs:
           npm run build
           npm run test
 
+      - name: Coveralls
+        # Report only when on the last LTS
+        if: >-
+          env.COVERALLS_REPO_TOKEN &&
+          github.event_name == 'push' &&
+          matrix.node == '18'
+        run: |
+          npm run report
+          npm run coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          COVERALLS_FLAG_NAME: node-${{ matrix.node }}
+
   publish:
     name: Publish
     if: github.event_name == 'release' && github.event.action == 'published'
