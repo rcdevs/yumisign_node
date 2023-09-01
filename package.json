@@ -1,6 +1,6 @@
 {
   "name": "yumisign",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "YumiSign API wrapper",
   "keywords": [
     "yumisgn",
