@@ -5,6 +5,8 @@ import {Envelopes} from '../../src/resources/Envelopes.js';
 import YumiSign from 'yumisign';
 import {expect} from 'chai';
 
+const nodeVersion = parseInt(process.versions.node.split('.')[0], 10);
+
 const yumisign = mockYumiSign();
 describe('Envelopes resource', () => {
   describe('retrieve', () => {
@@ -61,6 +63,13 @@ describe('Envelopes resource', () => {
   });
 
   describe('create', () => {
+    if (nodeVersion < 18) {
+      console.log(
+        `Envelope create test skipped. Node version >=18 required, actual ${nodeVersion}.`
+      );
+      return Promise.resolve();
+    }
+
     const envelopesResource = mockResource<YumiSign.EnvelopesResource>(
       yumisign,
       Envelopes,
@@ -119,6 +128,13 @@ describe('Envelopes resource', () => {
   });
 
   describe('addDocument', () => {
+    if (nodeVersion < 18) {
+      console.log(
+        `Envelope addDocument test skipped. Node version >=18 required, actual ${nodeVersion}.`
+      );
+      return Promise.resolve();
+    }
+
     const envelopesResource = mockResource<YumiSign.EnvelopesResource>(
       yumisign,
       Envelopes,
