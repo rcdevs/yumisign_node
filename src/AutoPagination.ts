@@ -44,9 +44,7 @@ class YumiSignAutoPaginationIterator<T> implements AsyncIterator<T> {
     requestParams?: YumiSignPaginationParams
   ) {
     if (requestParams && requestParams.limit && requestParams.limit > 100) {
-      throw new Error(
-        'YumiSign Node: You cannot specify a limit of more than 100 items.'
-      );
+      throw new Error('You cannot specify a limit of more than 100 items.');
     }
 
     this.index = 0;
@@ -78,7 +76,7 @@ class YumiSignAutoPaginationIterator<T> implements AsyncIterator<T> {
     paginatedList: YumiSignPaginatedList<T>
   ): Promise<IteratorResult<T>> {
     if (!(paginatedList && paginatedList.items)) {
-      throw new Error('YumiSign Node: Unsupported api response');
+      throw new Error('Unsupported api response');
     }
 
     if (this.index < paginatedList.items.length) {
@@ -148,9 +146,7 @@ function makeAutoPaginationToArray<T>(
   return function(options?: {limit?: number}): Promise<Array<T>> {
     const limit = options?.limit ?? 1000;
     if (limit > 1000) {
-      throw new Error(
-        'YumiSign Node: You cannot specify a limit of more than 1000 items.'
-      );
+      throw new Error('You cannot specify a limit of more than 1000 items.');
     }
 
     return new Promise<Array<T>>((resolve, reject) => {

@@ -27,7 +27,7 @@ export function createYumiSign(
       ).length > 0
     ) {
       throw new Error(
-        `YumiSign Node: Configuration may only contain the properties: ${ALLOWED_CONFIGURATIONS.join(
+        `Configuration may only contain the properties: ${ALLOWED_CONFIGURATIONS.join(
           ', '
         )}.`
       );
@@ -52,7 +52,7 @@ export function createYumiSign(
     _getClientId(): string {
       const clientId = this._config?.clientId;
       if (!clientId) {
-        throw new Error('YumiSign Node: Client id not defined.');
+        throw new Error('Client id not defined.');
       }
       return clientId;
     },
@@ -60,7 +60,7 @@ export function createYumiSign(
     _getClientSecret(): string {
       const clientSecret = this._config?.clientSecret;
       if (!clientSecret) {
-        throw new Error('YumiSign Node: Client secret not defined.');
+        throw new Error('Client secret not defined.');
       }
       return clientSecret;
     },
@@ -68,7 +68,7 @@ export function createYumiSign(
     _getOAuthToken(): YumiSignOAuthToken {
       const oAuthToken = this._oAuthToken;
       if (!oAuthToken) {
-        throw new Error('YumiSign Node: OAuth token not defined.');
+        throw new Error('OAuth token not defined.');
       }
       return oAuthToken;
     },
@@ -81,7 +81,7 @@ export function createYumiSign(
       const refreshToken =
         oAuthToken?.refresh_token || this._oAuthToken?.refresh_token;
       if (!refreshToken) {
-        throw new Error('YumiSign Node: Refresh token not defined.');
+        throw new Error('Refresh token not defined.');
       }
       this._oAuthToken = {...oAuthToken, refresh_token: refreshToken};
     },
@@ -122,7 +122,7 @@ export function createYumiSign(
                   })
                 );
               } else {
-                throw new Error('YumiSign Node: Refresh token not found.');
+                throw new Error('Refresh token not found.');
               }
             }
           },
