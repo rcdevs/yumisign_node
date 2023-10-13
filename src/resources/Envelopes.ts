@@ -49,6 +49,7 @@ export const Envelopes = YumiSignResource.extend({
         );
       });
     });
+    if (params.type) body.append('type', params.type);
     if (params.workspaceId)
       body.append('workspaceId', String(params.workspaceId));
     if (params.expiryDate) body.append('expiryDate', String(params.expiryDate));

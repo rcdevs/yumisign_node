@@ -86,6 +86,7 @@ describe('Envelopes resource', () => {
           type: 'sign',
         },
       ],
+      type: 'simple',
       workspaceId: 1,
       expiryDate: expiryDate,
       preferences: [
@@ -112,6 +113,7 @@ describe('Envelopes resource', () => {
           'steps[0][recipients][0][name]': 'John Doe',
           'steps[0][recipients][0][email]': 'john.doe@example.com',
           'steps[0][type]': 'sign',
+          type: 'simple',
           workspaceId: '1',
           expiryDate: String(expiryDate),
           'preferences[0][name]': 'WorkflowNotificationCallbackUrlPreference',

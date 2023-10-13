@@ -39,6 +39,11 @@ declare module 'yumisign' {
       }[];
 
       /**
+       * The type of the envelope. Default 'simple'.
+       */
+      type?: Envelope.Type;
+
+      /**
        * Workspace id for store the envelope.
        * First workspace used by default.
        */
