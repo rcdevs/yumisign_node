@@ -47,7 +47,7 @@
     "nanoid": "^3.2.0"
   },
   "dependencies": {
-    "@types/node": ">=8.1.0",
+    "@types/node": ">=8.1.0 <=20.8.3",
     "qs": "^6.11.0"
   },
   "license": "MIT",
