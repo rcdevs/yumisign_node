@@ -10,7 +10,7 @@
     "strict": true,
     "strictFunctionTypes": true,
     "types": ["node"],
-    "esModuleInterop": true
+    "esModuleInterop": false // This is a viral option, do not enable https://www.semver-ts.org/#module-interop
   },
   "include": ["./src/**/*"],
   "exclude": ["./src/yumisign.esm.node.ts", "./src/yumisign.esm.worker.ts"],

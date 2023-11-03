@@ -1,5 +1,5 @@
-import {PlatformFunctions} from './platforms/PlatformFunctions.js';
+import {WebPlatformFunctions} from './platforms/WebPlatformFunctions.js';
 import {createYumiSign} from './yumisign.core.js';
 
-export const YumiSign = createYumiSign(new PlatformFunctions());
+export const YumiSign = createYumiSign(new WebPlatformFunctions());
 export default YumiSign;

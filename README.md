@@ -168,3 +168,24 @@ const yumisign = YumiSign({
 | `clientSecret`    | False    | No default value           | Your YumiSign integration app client secret (Required for api requests) |
 | `baseUri`         | False    | `https://app.yumisign.com` | Base uri of YumiSign website                                            |
 | `oAuthTokenStore` | False    | Local storage              | A store object used to fetch save and remove your oauth token           |
+
+## Development
+
+Run tests:
+
+```sh
+npm install
+npm run test
+```
+
+Run a single test:
+
+```sh
+npm run mocha test/Errors.spec.ts
+```
+
+Run prettier:
+
+```sh
+npm run fix
+```

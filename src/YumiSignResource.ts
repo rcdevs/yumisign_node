@@ -119,7 +119,7 @@ YumiSignResource.prototype = {
                 refreshToken: this._yumisign._getOAuthToken().refresh_token,
               })
               .then(() =>
-                fetch(
+                this._request(
                   uri,
                   this._addAuthorizationHeader(
                     init,

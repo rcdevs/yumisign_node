@@ -59,14 +59,14 @@ export const Templates = YumiSignResource.extend({
 
   use(
     id: number,
-    params?: YumiSign.TemplateUseParams
+    params: YumiSign.TemplateUseParams
   ): Promise<YumiSign.Response<YumiSign.Envelope>> {
     return this._makeRequest<YumiSign.Envelope>(
       `/cloner/template/${id}/workflow`,
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: params ? JSON.stringify(params) : '{}',
+        body: JSON.stringify(params),
       }
     ).then((envelope) => toEnvelope(envelope));
   },

@@ -18,9 +18,8 @@ declare module 'yumisign' {
 
       /**
        * Workspace id for store the envelope.
-       * First workspace used by default.
        */
-      workspaceId?: number;
+      workspaceId: number;
     }
 
     class TemplatesResource extends YumiSignResource {

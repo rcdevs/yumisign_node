@@ -31,6 +31,7 @@ describe('Samples', function() {
       return run(`
         cd samples/app/${appName} &&
         rm -rf node_modules &&
+        rm -f package-lock.json &&
         npm install &&
         npm run lint &&
         npm run-script run
@@ -75,12 +76,14 @@ describe('Samples', function() {
         (
           cd samples/webhook/server/${serverName} &&
           rm -rf node_modules &&
+          rm -f package-lock.json &&
           npm install &&
           npm run lint
         ) &&
         (
           cd samples/webhook/client/test &&
           rm -rf node_modules &&
+          rm -f package-lock.json &&
           npm install &&
           ./index.ts ../../server/${serverName}
         )
