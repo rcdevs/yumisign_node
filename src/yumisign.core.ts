@@ -5,6 +5,7 @@ import * as Errors from './Errors.js';
 import * as resources from './resources.js';
 import {PlatformFunctions} from './platforms/PlatformFunctions.js';
 import {createWebhooks} from './Webhooks.js';
+import { YumiSignResource } from 'yumisign';
 
 const ALLOWED_CONFIGURATIONS: string[] = [
   'clientId',
@@ -47,6 +48,10 @@ export function createYumiSign(
   YumiSign.prototype = {
     getBaseUri(): string {
       return this._config?.baseUri || 'https://app.yumisign.com';
+    },
+
+    rawRequest() {
+      new YumiSignResource.extend({})
     },
 
     _getClientId(): string {

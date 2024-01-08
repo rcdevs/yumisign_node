@@ -1,6 +1,7 @@
 ///<reference path='./Errors.d.ts' />
 ///<reference path='./Webhooks.d.ts' />
 ///<reference path='./resources/Actions.d.ts' />
+///<reference path='./resources/AppResource.d.ts' />
 ///<reference path='./resources/Documents.d.ts' />
 ///<reference path='./resources/Envelopes.d.ts' />
 ///<reference path='./resources/EnvelopesResource.d.ts' />
@@ -12,6 +13,9 @@
 ///<reference path='./resources/Profile.d.ts' />
 ///<reference path='./resources/ProfileResource.d.ts' />
 ///<reference path='./resources/Steps.d.ts' />
+///<reference path='./resources/SubscriptionItems.d.ts' />
+///<reference path='./resources/Subscriptions.d.ts' />
+///<reference path='./resources/SubscriptionsResource.d.ts' />
 ///<reference path='./resources/Templates.d.ts' />
 ///<reference path='./resources/TemplatesResource.d.ts' />
 ///<reference path='./resources/Workspaces.d.ts' />
@@ -146,9 +150,11 @@ declare module 'yumisign' {
     errors: typeof YumiSign.Errors;
     webhooks: YumiSign.Webhooks;
 
+    app: YumiSign.AppResource;
     envelopes: YumiSign.EnvelopesResource;
     oauth: YumiSign.OAuthResource;
     profile: YumiSign.ProfileResource;
+    subscriptions: YumiSign.SubscriptionsResource;
     templates: YumiSign.TemplatesResource;
     workspaces: YumiSign.WorkspacesResource;
 

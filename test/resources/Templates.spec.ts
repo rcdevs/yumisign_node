@@ -76,6 +76,7 @@ describe('Templates resource', () => {
         {name: 'rcp_name_1', email: 'rcp_email_1'},
         {name: 'rcp_name_2', email: 'rcp_email_2'},
       ],
+      workspaceId: 1,
     };
 
     it('Sends the correct request', async () => {
