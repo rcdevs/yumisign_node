@@ -1,5 +1,7 @@
 import YumiSign from 'yumisign';
 import {YumiSignResource} from '../YumiSignResource.js';
+import {addQueryParams} from '../utils/uri.js';
+import {makeAutoPaginatePromise} from '../utils/pagination.js';
 import {toEnvelope} from '../utils/converter.js';
 
 export const Envelopes = YumiSignResource.extend({
@@ -15,18 +17,34 @@ export const Envelopes = YumiSignResource.extend({
     ).then((envelope) => toEnvelope(envelope));
   },
 
-  list(ids: string[]): Promise<YumiSign.BulkItem<YumiSign.Envelope>[]> {
-    return this._makeRequest<YumiSign.BulkItem<YumiSign.Envelope>[]>(
-      `?ids[]=${ids.join('&ids[]=')}`,
-      {method: 'GET'}
-    ).then((bulkItems) =>
-      bulkItems.map((bulkItem) => {
-        const {response, ...rest} = bulkItem;
+  list(
+    params?: YumiSign.EnvelopeListParams
+  ): YumiSign.PaginatedListPromise<YumiSign.Envelope> {
+    const list = (
+      params?: YumiSign.EnvelopeListParams
+    ): Promise<YumiSign.Response<
+      YumiSign.PaginatedList<YumiSign.Envelope>
+    >> => {
+      const endpoint = addQueryParams('', params);
+
+      return this._makeRequest<YumiSign.PaginatedList<YumiSign.Envelope>>(
+        endpoint,
+        {method: 'GET'}
+      ).then((paginatedList) => {
+        const {items, ...rest} = paginatedList;
+
         return {
-          response: response ? toEnvelope(response) : response,
+          items: items.map((item) => toEnvelope(item)),
           ...rest,
         };
-      })
+      });
+    };
+
+    return makeAutoPaginatePromise<YumiSign.Envelope>(
+      list(params),
+      this,
+      list,
+      params
     );
   },
 

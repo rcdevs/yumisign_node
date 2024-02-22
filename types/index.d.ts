@@ -7,6 +7,7 @@
 ///<reference path='./resources/EnvelopesResource.d.ts' />
 ///<reference path='./resources/Events.d.ts' />
 ///<reference path='./resources/Files.d.ts' />
+///<reference path='./resources/HttpSources.d.ts' />
 ///<reference path='./resources/OAuth.d.ts' />
 ///<reference path='./resources/OAuthResource.d.ts' />
 ///<reference path='./resources/Preferences.d.ts' />
@@ -84,7 +85,7 @@ declare module 'yumisign' {
 
     interface PaginationParams {
       /**
-       * A limit on the number of objects to be returned.
+       * A limit on the number of objects to be returned. The default is 8.
        */
       limit?: number;
 
@@ -92,6 +93,11 @@ declare module 'yumisign' {
        * The number of the page contain objects. The default is 1.
        */
       page?: number;
+
+      /**
+       * The search query string.
+       */
+      query?: string;
     }
   }
 

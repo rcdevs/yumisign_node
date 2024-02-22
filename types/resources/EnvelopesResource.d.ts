@@ -7,6 +7,33 @@ declare module 'yumisign' {
       session?: boolean;
     }
 
+    interface EnvelopeListParams extends YumiSign.PaginationParams {
+      /**
+       * The envelope status filter.
+       */
+      status?: Envelope.Status[];
+
+      /**
+       * The creator email address filter.
+       */
+      creatorEmail?: string;
+
+      /**
+       * The http source types filter.
+       */
+      httpSourceTypes?: HttpSource.Type[];
+
+      /**
+       * The http source values filter.
+       */
+      httpSourceValues?: string[];
+
+      /**
+       * The metadata filter.
+       */
+      metadata?: MetadataParam;
+    }
+
     interface EnvelopeCreateParams {
       /**
        * A name for your envelope.
@@ -104,9 +131,11 @@ declare module 'yumisign' {
       ): Promise<YumiSign.Response<YumiSign.Envelope>>;
 
       /**
-       * Return a list of envelopes.
+       * Return a list of your envelopes.
        */
-      list(ids: string[]): YumiSign.BulkPromise<YumiSign.Envelope>;
+      list(
+        params?: EnvelopeListParams
+      ): YumiSign.PaginatedListPromise<YumiSign.Envelope>;
 
       /**
        * Create a new envelope.

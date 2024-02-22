@@ -37,28 +37,31 @@ describe('Envelopes resource', () => {
     const envelopesResource = mockResource<YumiSign.EnvelopesResource>(
       yumisign,
       Envelopes,
-      [
-        {identifier: 'env_1', result: true, response: {id: 'env_1'}},
-        {identifier: 'env_2', result: true, response: {id: 'env_2'}},
-      ]
+      {
+        total: 2,
+        limit: 2,
+        pages: 1,
+        items: [{id: 'env_1'}, {id: 'env_2'}],
+      }
     );
+    const params: YumiSign.EnvelopeListParams = {page: 1, limit: 10};
 
     it('Sends the correct request', async () => {
-      await envelopesResource.list(['env_1', 'env_2']);
+      await envelopesResource.list(params);
       expect(yumisign.LAST_REQUEST).to.deep.equal({
         method: 'GET',
-        url: '/api/v1/envelopes?ids[]=env_1&ids[]=env_2',
+        url: '/api/v1/envelopes?page=1&limit=10',
         headers: {
           Authorization: `Bearer ${TEST_ACCESS_TOKEN}`,
         },
       });
     });
 
-    it('Should return bulk envelopes', async () => {
-      const envelopes = await envelopesResource.list(['env_1', 'env_2']);
-      expect(envelopes).to.have.lengthOf(2);
-      expect(envelopes[0]?.response?.id).to.equal('env_1');
-      expect(envelopes[1]?.response?.id).to.equal('env_2');
+    it('Should return paginated envelopes', async () => {
+      const envelopes = await envelopesResource.list(params);
+      expect(envelopes.items).to.have.lengthOf(2);
+      expect(envelopes.items[0].id).to.equal('env_1');
+      expect(envelopes.items[1].id).to.equal('env_2');
     });
   });
 

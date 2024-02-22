@@ -1,6 +1,7 @@
 import {toAction, toEnvelope} from '../utils/converter.js';
 import YumiSign from 'yumisign';
 import {YumiSignResource} from '../YumiSignResource.js';
+import {addQueryParams} from '../utils/uri.js';
 import {makeAutoPaginatePromise} from '../utils/pagination.js';
 
 export const Profile = YumiSignResource.extend({
@@ -16,23 +17,14 @@ export const Profile = YumiSignResource.extend({
     const list = (
       params?: YumiSign.ProfileActionListParams
     ): Promise<YumiSign.Response<YumiSign.PaginatedList<YumiSign.Action>>> => {
-      let endpoint = '/actions';
-      if (params) {
-        const urlSearchParams = new URLSearchParams();
-        Object.entries(params).forEach(([key, value]) => {
-          urlSearchParams.append(key, value);
-        });
-        endpoint =
-          urlSearchParams.toString().length > 0
-            ? endpoint + `?${urlSearchParams.toString()}`
-            : endpoint;
-      }
+      const endpoint = addQueryParams('/actions', params);
 
       return this._makeRequest<YumiSign.PaginatedList<YumiSign.Action>>(
         endpoint,
         {method: 'GET'}
       ).then((paginatedList) => {
         const {items, ...rest} = paginatedList;
+
         return {
           items: items.map((item) => toAction(item)),
           ...rest,
@@ -56,23 +48,14 @@ export const Profile = YumiSignResource.extend({
     ): Promise<YumiSign.Response<
       YumiSign.PaginatedList<YumiSign.Envelope>
     >> => {
-      let endpoint = '/signed-envelopes';
-      if (params) {
-        const urlSearchParams = new URLSearchParams();
-        Object.entries(params).forEach(([key, value]) => {
-          urlSearchParams.append(key, value);
-        });
-        endpoint =
-          urlSearchParams.toString().length > 0
-            ? endpoint + `?${urlSearchParams.toString()}`
-            : endpoint;
-      }
+      const endpoint = addQueryParams('/signed-envelopes', params);
 
       return this._makeRequest<YumiSign.PaginatedList<YumiSign.Envelope>>(
         endpoint,
         {method: 'GET'}
       ).then((paginatedList) => {
         const {items, ...rest} = paginatedList;
+
         return {
           items: items.map((item) => toEnvelope(item)),
           ...rest,

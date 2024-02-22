@@ -1,6 +1,7 @@
 import {toEnvelope, toTemplate} from '../utils/converter.js';
 import YumiSign from 'yumisign';
 import {YumiSignResource} from '../YumiSignResource.js';
+import {addQueryParams} from '../utils/uri.js';
 import {makeAutoPaginatePromise} from '../utils/pagination.js';
 
 export const Templates = YumiSignResource.extend({
@@ -25,23 +26,17 @@ export const Templates = YumiSignResource.extend({
     ): Promise<YumiSign.Response<
       YumiSign.PaginatedList<YumiSign.Template>
     >> => {
-      let endpoint = `/workspaces/${workspaceId}/templates`;
-      if (params) {
-        const urlSearchParams = new URLSearchParams();
-        Object.entries(params).forEach(([key, value]) => {
-          urlSearchParams.append(key, value);
-        });
-        endpoint =
-          urlSearchParams.toString().length > 0
-            ? endpoint + `?${urlSearchParams.toString()}`
-            : endpoint;
-      }
+      const endpoint = addQueryParams(
+        `/workspaces/${workspaceId}/templates`,
+        params
+      );
 
       return this._makeRequest<YumiSign.PaginatedList<YumiSign.Template>>(
         endpoint,
         {method: 'GET'}
       ).then((paginatedList) => {
         const {items, ...rest} = paginatedList;
+
         return {
           items: items.map((item) => toTemplate(item)),
           ...rest,
