@@ -9,24 +9,29 @@ declare module 'yumisign' {
 
     interface EnvelopeListParams extends YumiSign.PaginationParams {
       /**
-       * The envelope status filter.
+       * A set of filters.
        */
-      status?: Envelope.Status[];
+      filters?: {
+        /**
+         * The envelope status filter.
+         */
+        status?: Envelope.Status[];
 
-      /**
-       * The creator email address filter.
-       */
-      creatorEmail?: string;
+        /**
+         * The creator email address filter.
+         */
+        creatorEmail?: string;
 
-      /**
-       * The http source types filter.
-       */
-      httpSourceTypes?: HttpSource.Type[];
+        /**
+         * The http source types filter.
+         */
+        httpSourceTypes?: HttpSource.Type[];
 
-      /**
-       * The http source values filter.
-       */
-      httpSourceValues?: string[];
+        /**
+         * The http source values filter.
+         */
+        httpSourceValues?: string[];
+      };
 
       /**
        * The metadata filter.
