@@ -3,8 +3,35 @@
 
 'use strict';
 
+import {TEST_CLIENT_ID} from './mockery.js';
 import {expect} from 'chai';
 import YumiSign = require('../src/yumisign.cjs.node.js');
+
+class LocalStorageMock {
+  private store: Record<string, string>;
+
+  constructor() {
+    this.store = {};
+  }
+
+  clear() {
+    this.store = {};
+  }
+
+  getItem(key: string) {
+    return this.store[key] || null;
+  }
+
+  setItem(key: string, value: string) {
+    this.store[key] = value;
+  }
+
+  removeItem(key: string) {
+    delete this.store[key];
+  }
+}
+
+(global as unknown).localStorage = new LocalStorageMock();
 
 describe('YumiSign', () => {
   describe('Object configuration', () => {
@@ -128,11 +155,91 @@ describe('YumiSign', () => {
   describe('_getOAuthTokenStore', () => {
     it('Should return the oAuth token store', () => {
       const yumisign = YumiSign();
-      expect(yumisign._getOAuthTokenStore()).to.have.keys([
-        'get',
-        'set',
-        'del',
-      ]);
+      const oAuthTokenStore = yumisign._getOAuthTokenStore();
+      expect(oAuthTokenStore).to.have.keys(['get', 'set', 'del']);
+      expect(oAuthTokenStore.get).to.be.a('function');
+      expect(oAuthTokenStore.set).to.be.a('function');
+      expect(oAuthTokenStore.del).to.be.a('function');
+    });
+
+    it('Should get an OAuth token from localStorage', () => {
+      const yumisign = YumiSign({clientId: TEST_CLIENT_ID});
+      const oAuthToken = {
+        access_token: 'access_token',
+        refresh_token: 'refresh_token',
+      };
+
+      localStorage.setItem(
+        `yumisign_${TEST_CLIENT_ID}`,
+        JSON.stringify(oAuthToken)
+      );
+
+      const oAuthTokenStore = yumisign._getOAuthTokenStore();
+      expect(oAuthTokenStore.get()).to.deep.equal(oAuthToken);
+    });
+
+    it('Should set an OAuth token in localStorage with refresh token', () => {
+      const yumisign = YumiSign({clientId: TEST_CLIENT_ID});
+      const oAuthTokenStore = yumisign._getOAuthTokenStore();
+      const oAuthToken = {
+        access_token: 'access_token',
+        refresh_token: 'refresh_token',
+      };
+
+      oAuthTokenStore.set(oAuthToken);
+      const storedOAuthToken = JSON.parse(
+        localStorage.getItem(`yumisign_${TEST_CLIENT_ID}`) || '{}'
+      );
+      expect(storedOAuthToken).to.deep.equal(oAuthToken);
+    });
+
+    it('Should set an OAuth token in localStorage without refresh token but use existing one', () => {
+      const yumisign = YumiSign({clientId: TEST_CLIENT_ID});
+      const initialOAuthToken = {
+        access_token: 'initial_access_token',
+        refresh_token: 'refresh_token',
+      };
+
+      localStorage.setItem(
+        `yumisign_${TEST_CLIENT_ID}`,
+        JSON.stringify(initialOAuthToken)
+      );
+
+      const oAuthTokenStore = yumisign._getOAuthTokenStore();
+      const newOAuthToken = {
+        access_token: 'new_access_token',
+      };
+
+      oAuthTokenStore.set(newOAuthToken);
+      const storedOAuthToken = JSON.parse(
+        localStorage.getItem(`yumisign_${TEST_CLIENT_ID}`) || '{}'
+      );
+      expect(storedOAuthToken).to.deep.equal({
+        access_token: 'new_access_token',
+        refresh_token: 'refresh_token',
+      });
+    });
+
+    it('Should throw an error when setting an OAuth token without refresh token and no existing token', () => {
+      const yumisign = YumiSign({clientId: TEST_CLIENT_ID});
+      const oAuthTokenStore = yumisign._getOAuthTokenStore();
+      const newOAuthToken = {
+        access_token: 'new_access_token',
+      };
+
+      localStorage.removeItem(`yumisign_${TEST_CLIENT_ID}`);
+
+      expect(() => {
+        oAuthTokenStore.set(newOAuthToken);
+      }).to.throw(/Refresh token not found/);
+    });
+
+    it('Should delete an OAuth token from localStorage', () => {
+      const yumisign = YumiSign({clientId: TEST_CLIENT_ID});
+      const oAuthTokenStore = yumisign._getOAuthTokenStore();
+
+      oAuthTokenStore.del();
+      expect(localStorage.getItem(`yumisign_${TEST_CLIENT_ID}`)).to.be.null;
     });
   });
 

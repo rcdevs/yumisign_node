@@ -2,7 +2,7 @@
 
 'use strict';
 
-import {YumiSignResource} from '../src/YumiSignResource';
+import {YumiSignResource} from '../src/YumiSignResource.js';
 import YumiSign = require('../src/yumisign.cjs.node.js');
 
 type LastRequest = {
@@ -17,6 +17,7 @@ type YumiSignMockObject = YumiSignObject & {
   LAST_REQUEST?: LastRequest;
 };
 
+export const TEST_BASE_URI = 'https://test.foo.bar';
 export const TEST_CLIENT_ID = 'test_client_id';
 export const TEST_CLIENT_SECRET = 'test_client_secret';
 export const TEST_ACCESS_TOKEN = 'test_access_token';
@@ -25,6 +26,7 @@ export const TEST_REFRESH_TOKEN = 'test_refresh_token';
 export function mockYumiSign(): YumiSignMockObject {
   // @ts-ignore
   const yumisign = new YumiSign({
+    baseUri: TEST_BASE_URI,
     clientId: TEST_CLIENT_ID,
     clientSecret: TEST_CLIENT_SECRET,
   });

@@ -6,7 +6,7 @@
 import {YumiSignResource} from '../src/YumiSignResource.js';
 import {expect} from 'chai';
 import {makeAutoPaginationMethods} from '../src/AutoPagination.js';
-import {mockYumiSign} from './mockery';
+import {mockYumiSign} from './mockery.js';
 
 describe('Auto pagination', () => {
   const mockPagination = (

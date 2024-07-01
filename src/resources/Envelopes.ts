@@ -113,22 +113,18 @@ export const Envelopes = YumiSignResource.extend({
     id: string,
     params?: YumiSign.EnvelopeDesignerUriParams
   ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this._makeRequest<{session: string; designerUrl: string}>(
-        `/${id}/session`,
-        {method: 'GET'}
-      )
-        .then(({designerUrl}) => {
-          const url = new URL(designerUrl);
-          if (params?.callback) {
-            url.searchParams.append('callback', encodeURI(params.callback));
-          }
-          if (params?.autoStart) {
-            url.searchParams.append('auto_start', '1');
-          }
-          resolve(url.toString());
-        })
-        .catch((error) => reject(error));
+    return this._makeRequest<{session: string; designerUrl: string}>(
+      `/${id}/session`,
+      {method: 'GET'}
+    ).then(({designerUrl}) => {
+      const url = new URL(designerUrl);
+      if (params?.callback) {
+        url.searchParams.append('callback', encodeURI(params.callback));
+      }
+      if (params?.autoStart) {
+        url.searchParams.append('auto_start', '1');
+      }
+      return url.toString();
     });
   },
 
