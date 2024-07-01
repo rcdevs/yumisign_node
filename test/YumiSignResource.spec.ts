@@ -11,6 +11,46 @@ const BASE_PATH = '/api/v1';
 const RESOURCE_PATH = '/foo';
 const REQUEST_INIT = {method: 'GET'};
 
+class ResponseMock {
+  body: any;
+  init: any;
+  headers: any;
+
+  constructor(body: any = null, init: any = {}) {
+    this.body = body;
+    this.init = init;
+    this.headers = {
+      _headers: init.headers || {},
+      has(key: string) {
+        return Object.prototype.hasOwnProperty.call(this._headers, key);
+      },
+      get(key: string) {
+        return this.has(key) ? this._headers[key] : null;
+      },
+    };
+  }
+
+  json() {
+    return Promise.resolve(
+      typeof this.body === 'string' ? JSON.parse(this.body) : this.body
+    );
+  }
+
+  text() {
+    return Promise.resolve(
+      typeof this.body === 'object' ? JSON.stringify(this.body) : this.body
+    );
+  }
+
+  get status() {
+    return this.init.status || 200;
+  }
+
+  get ok() {
+    return this.status >= 200 && this.status < 300;
+  }
+}
+
 describe('YumiSign Resource', () => {
   // @ts-ignore
   const yumisignResource = new (YumiSignResource.extend({
@@ -67,10 +107,11 @@ describe('YumiSign Resource', () => {
     it('Should make a fetch request with the provided uri and init', async () => {
       const requestUri = yumisignResource._createUri('');
 
+      // @ts-ignore
       global.fetch = (uri, init) => {
         expect(uri).to.equal(requestUri);
         expect(init).to.deep.equal(REQUEST_INIT);
-        return Promise.resolve(new Response());
+        return Promise.resolve(new ResponseMock());
       };
 
       await yumisignResource._request(requestUri, REQUEST_INIT);
@@ -79,12 +120,13 @@ describe('YumiSign Resource', () => {
 
   describe('_makeRequest', () => {
     it('Should make an authenticated request', async () => {
+      // @ts-ignore
       yumisignResource._request = (uri: any, init: any) => {
         expect(init.headers).to.deep.equal({
           Authorization: `Bearer ${yumisign._oAuthToken?.access_token}`,
         });
         return Promise.resolve(
-          new Response(JSON.stringify({result: 'Success'}), {
+          new ResponseMock(JSON.stringify({result: 'Success'}), {
             status: 200,
             headers: {'Content-Type': 'application/json'},
           })
@@ -97,7 +139,8 @@ describe('YumiSign Resource', () => {
 
     it('Should handle successful text responses', async () => {
       yumisignResource._request = () =>
-        Promise.resolve(new Response('Success', {status: 200}));
+        // @ts-ignore
+        Promise.resolve(new ResponseMock('Success', {status: 200}));
 
       const response = await yumisignResource._makeRequest('', REQUEST_INIT);
       expect(response).to.equal('Success');
@@ -114,19 +157,20 @@ describe('YumiSign Resource', () => {
         deauthorize: () => Promise.resolve(undefined),
       };
 
+      // @ts-ignore
       yumisignResource._request = (uri: any, init: any) => {
         requestCallCount += 1;
         if (requestCallCount === 1) {
           expect(init.headers).to.deep.equal({
             Authorization: `Bearer ${yumisign._oAuthToken?.access_token}`,
           });
-          return Promise.resolve(new Response(null, {status: 401}));
+          return Promise.resolve(new ResponseMock(null, {status: 401}));
         } else {
           expect(init.headers).to.deep.equal({
             Authorization: `Bearer ${yumisign._oAuthToken?.access_token}`,
           });
           return Promise.resolve(
-            new Response(JSON.stringify({result: 'Success'}), {
+            new ResponseMock(JSON.stringify({result: 'Success'}), {
               status: 200,
               headers: {'Content-Type': 'application/json'},
             })
@@ -140,10 +184,11 @@ describe('YumiSign Resource', () => {
     });
 
     const errorTestCase = async (
-      response: Response,
+      response: ResponseMock,
       errorClass: typeof YumiSignError,
       errorMessage?: string
     ) => {
+      // @ts-ignore
       yumisignResource._request = () => Promise.resolve(response);
 
       const error = await new Promise<Error>((resolve, reject) => {
@@ -163,10 +208,10 @@ describe('YumiSign Resource', () => {
       const message = 'Forbidden';
 
       return errorTestCase(
-        new Response(JSON.stringify({error: {statusCode: status, message}}), {
-          status,
-          headers: {'Content-Type': 'application/json'},
-        }),
+        new ResponseMock(
+          JSON.stringify({error: {statusCode: status, message}}),
+          {status, headers: {'Content-Type': 'application/json'}}
+        ),
         YumiSignPermissionError
       );
     });
@@ -176,10 +221,10 @@ describe('YumiSign Resource', () => {
       const message = 'Internal server error';
 
       return errorTestCase(
-        new Response(JSON.stringify({error: {statusCode: status, message}}), {
-          status,
-          headers: {'Content-Type': 'application/json'},
-        }),
+        new ResponseMock(
+          JSON.stringify({error: {statusCode: status, message}}),
+          {status, headers: {'Content-Type': 'application/json'}}
+        ),
         YumiSignError,
         message
       );
@@ -187,7 +232,7 @@ describe('YumiSign Resource', () => {
 
     it('Should handle non json error responses', () => {
       return errorTestCase(
-        new Response(null, {status: 500}),
+        new ResponseMock(null, {status: 500}),
         YumiSignError,
         'Unknown error'
       );
