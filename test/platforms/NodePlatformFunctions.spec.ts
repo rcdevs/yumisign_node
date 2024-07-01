@@ -1,6 +1,6 @@
 'use strict';
 
-import {NodeCryptoHelper} from '../../src/crypto/NodeCryptoHelper';
+import {NodeCryptoHelper} from '../../src/crypto/NodeCryptoHelper.js';
 import {NodePlatformFunctions} from '../../src/platforms/NodePlatformFunctions.js';
 import {expect} from 'chai';
 
