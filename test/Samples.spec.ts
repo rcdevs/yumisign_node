@@ -42,6 +42,16 @@ describe('Samples', function() {
       return appTestCase('cjs');
     });
 
+    it('Should work with ESBuild', async function() {
+      if (nodeVersion < 13) {
+        console.log(
+          `App test skipped. Node version >=13 required, actual ${nodeVersion}.`
+        );
+        this.skip();
+      }
+      await appTestCase('esbuild');
+    });
+
     it('Should work with Javascript ESModule', async function() {
       if (nodeVersion < 13) {
         console.log(

@@ -1,10 +1,13 @@
 .idea
 .DS_Store
 
-package-lock.json
 node_modules
 cjs
 esm
 .npm-debug.log
 .nyc_output
 coverage
+
+samples/**/dist
+samples/**/node_modules
+samples/**/package-lock.json

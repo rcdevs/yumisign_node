@@ -1,7 +1,7 @@
 {
   "name": "yumisign-sample-app-esm-ts",
   "version": "1.0.0",
-  "description": "YumiSign sample for typescript ecmascript module app",
+  "description": "",
   "author": "RCDevs Identity SA",
   "repository": {},
   "main": "./index.ts",

@@ -25,8 +25,18 @@ describe('Errors', () => {
     });
   });
 
-  it('Should provide type as their name', () => {
+  it('Should provide default type', () => {
     class FooError extends YumiSignError {}
+    const error = new FooError({message: 'Error'});
+    expect(error).to.have.property('type', 'YumiSignError');
+  });
+
+  it('Should respect type overriding by subclasses', () => {
+    class FooError extends YumiSignError {
+      constructor(raw: any) {
+        super(raw, 'FooError');
+      }
+    }
     const error = new FooError({message: 'Error'});
     expect(error).to.have.property('type', 'FooError');
   });

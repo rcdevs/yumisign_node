@@ -68,7 +68,9 @@ export function createYumiSign(
     _getOAuthToken(): YumiSignOAuthToken {
       const oAuthToken = this._oAuthToken;
       if (!oAuthToken) {
-        throw new Error('OAuth token not defined.');
+        throw new Errors.YumiSignError({
+          message: 'OAuth token not defined.',
+        });
       }
       return oAuthToken;
     },

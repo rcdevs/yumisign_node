@@ -1,16 +1,16 @@
 {
-  "name": "yumisign-sample-app-esm-js",
-  "type": "module",
+  "name": "yumisign-sample-app-esbuild",
   "version": "1.0.0",
   "description": "",
   "author": "RCDevs Identity SA",
   "repository": {},
   "main": "./index.js",
   "scripts": {
-    "run": "node index.js",
+    "run": "rm -rf dist && esbuild index.js --bundle --platform=node --minify --target=es2020 --outdir=dist && node dist/index.js",
     "lint": "eslint ."
   },
   "devDependencies": {
+    "esbuild": "^0.20.2",
     "eslint": "^8.33.0",
     "eslint-plugin-import": "^2.28.1"
   },
