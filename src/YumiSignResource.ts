@@ -1,3 +1,4 @@
+import './polyfills/AbortController.js';
 import {
   YumiSignAuthenticationError,
   YumiSignError,
