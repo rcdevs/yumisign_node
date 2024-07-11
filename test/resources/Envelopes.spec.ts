@@ -13,7 +13,7 @@ describe('Envelopes resource', () => {
     const envelopesResource = mockResource<YumiSign.EnvelopesResource>(
       yumisign,
       Envelopes,
-      {id: 'env_1'}
+      {body: {id: 'env_1'}}
     );
 
     it('Sends the correct request', async () => {
@@ -38,10 +38,12 @@ describe('Envelopes resource', () => {
       yumisign,
       Envelopes,
       {
-        total: 2,
-        limit: 2,
-        pages: 1,
-        items: [{id: 'env_1'}, {id: 'env_2'}],
+        body: {
+          total: 2,
+          limit: 2,
+          pages: 1,
+          items: [{id: 'env_1'}, {id: 'env_2'}],
+        },
       }
     );
     const params: YumiSign.EnvelopeListParams = {page: 1, limit: 10};
@@ -76,7 +78,7 @@ describe('Envelopes resource', () => {
     const envelopesResource = mockResource<YumiSign.EnvelopesResource>(
       yumisign,
       Envelopes,
-      {id: 'env_1'}
+      {body: {id: 'env_1'}}
     );
     const expiryDate = Math.floor(Date.now() / 1000);
     const params: YumiSign.EnvelopeCreateParams = {
@@ -143,7 +145,7 @@ describe('Envelopes resource', () => {
     const envelopesResource = mockResource<YumiSign.EnvelopesResource>(
       yumisign,
       Envelopes,
-      {id: 'env_1'}
+      {body: {id: 'env_1'}}
     );
     const params: YumiSign.EnvelopeAddDocumentParams = {
       document: new Blob([''], {type: 'application/pdf'}),
@@ -174,7 +176,7 @@ describe('Envelopes resource', () => {
     const envelopesResource = mockResource<YumiSign.EnvelopesResource>(
       yumisign,
       Envelopes,
-      {designerUrl: 'https://foo.com/bar'}
+      {body: {designerUrl: 'https://foo.com/bar'}}
     );
 
     it('Sends the correct request', async () => {
@@ -203,7 +205,7 @@ describe('Envelopes resource', () => {
     const envelopesResource = mockResource<YumiSign.EnvelopesResource>(
       yumisign,
       Envelopes,
-      {envelopeView: 'https://foo.com/bar'}
+      {body: {envelopeView: 'https://foo.com/bar'}}
     );
 
     it('Sends the correct request', async () => {
@@ -227,7 +229,7 @@ describe('Envelopes resource', () => {
     const envelopesResource = mockResource<YumiSign.EnvelopesResource>(
       yumisign,
       Envelopes,
-      {id: 'env_1'}
+      {body: {id: 'env_1'}}
     );
 
     it('Sends the correct request', async () => {

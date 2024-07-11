@@ -29,7 +29,8 @@ declare module 'yumisign' {
        * Retrieves requested initialization application data.
        */
       init(
-        params: AppInitializeParams
+        params: AppInitializeParams,
+        options?: YumiSign.RequestOptions
       ): Promise<YumiSign.Response<AppInitializeResponse>>;
     }
   }

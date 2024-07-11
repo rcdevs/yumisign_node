@@ -11,7 +11,7 @@ describe('Subscriptions resource', () => {
     const subscriptionsResource = mockResource<YumiSign.SubscriptionsResource>(
       yumisign,
       Subscriptions,
-      {id: 1}
+      {body: {id: 1}}
     );
 
     it('Sends the correct request', async () => {

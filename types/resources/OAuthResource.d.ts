@@ -50,13 +50,17 @@ declare module 'yumisign' {
       /**
        * Turning a code into a refresh_token.
        */
-      access(params: OAuthAccessParams): Promise<YumiSign.OAuthToken>;
+      access(
+        params: OAuthAccessParams,
+        options?: YumiSign.RequestOptions
+      ): Promise<YumiSign.OAuthToken>;
 
       /**
        * Get a new access token using your refresh_token.
        */
       refresh(
-        params: OAuthRefreshParams
+        params: OAuthRefreshParams,
+        options?: YumiSign.RequestOptions
       ): Promise<Omit<YumiSign.OAuthToken, 'refresh_token'>>;
 
       /**

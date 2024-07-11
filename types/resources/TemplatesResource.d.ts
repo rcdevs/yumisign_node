@@ -28,7 +28,8 @@ declare module 'yumisign' {
        */
       retrieve(
         workspaceId: number,
-        id: number
+        id: number,
+        options?: YumiSign.RequestOptions
       ): Promise<YumiSign.Response<YumiSign.Template>>;
 
       /**
@@ -36,7 +37,8 @@ declare module 'yumisign' {
        */
       list(
         workspaceId: number,
-        params?: TemplateListParams
+        params?: TemplateListParams,
+        options?: YumiSign.RequestOptions
       ): YumiSign.PaginatedListPromise<YumiSign.Template>;
 
       /**
@@ -44,7 +46,8 @@ declare module 'yumisign' {
        */
       use(
         id: number,
-        params: TemplateUseParams
+        params: TemplateUseParams,
+        options?: YumiSign.RequestOptions
       ): Promise<YumiSign.Response<YumiSign.Envelope>>;
     }
   }

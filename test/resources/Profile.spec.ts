@@ -12,7 +12,7 @@ describe('Profile resource', () => {
     const profileResource = mockResource<YumiSign.ProfileResource>(
       yumisign,
       Profile,
-      {id: 1}
+      {body: {id: 1}}
     );
 
     it('Sends the correct request', async () => {
@@ -37,13 +37,15 @@ describe('Profile resource', () => {
       yumisign,
       Profile,
       {
-        total: 2,
-        limit: 2,
-        pages: 1,
-        items: [
-          {id: 1, envelope: {id: 1}},
-          {id: 2, envelope: {id: 2}},
-        ],
+        body: {
+          total: 2,
+          limit: 2,
+          pages: 1,
+          items: [
+            {id: 1, envelope: {id: 1}},
+            {id: 2, envelope: {id: 2}},
+          ],
+        },
       }
     );
     const params: YumiSign.ProfileActionListParams = {page: 1, limit: 10};
@@ -72,10 +74,12 @@ describe('Profile resource', () => {
       yumisign,
       Profile,
       {
-        total: 2,
-        limit: 2,
-        pages: 1,
-        items: [{id: 1}, {id: 2}],
+        body: {
+          total: 2,
+          limit: 2,
+          pages: 1,
+          items: [{id: 1}, {id: 2}],
+        },
       }
     );
     const params: YumiSign.ProfileSignedEnvelopeListParams = {

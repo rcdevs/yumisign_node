@@ -4,9 +4,9 @@ import {YumiSignResource} from '../YumiSignResource.js';
 export const Workspaces = YumiSignResource.extend({
   resourcePath: '/workspaces',
 
-  list(): Promise<YumiSign.Response<YumiSign.Workspace[]>> {
-    return this._makeRequest('', {
-      method: 'GET',
-    });
+  list(
+    options?: YumiSign.RequestOptions
+  ): Promise<YumiSign.Response<YumiSign.Workspace[]>> {
+    return this._makeRequest('', {method: 'GET'}, options);
   },
 } as YumiSign.WorkspacesResource);

@@ -1,4 +1,10 @@
 /* eslint-disable camelcase */
+type YumiSignRequestOptions = {
+  timeout?: number;
+};
+
+type YumiSignRequestConfig = Required<YumiSignRequestOptions>;
+
 type YumiSignResponse<T> = T & {
   lastResponse: {
     headers: {[key: string]: string};
@@ -46,6 +52,7 @@ type YumiSignObjectConfig = {
   clientId?: string;
   clientSecret?: string;
   oAuthTokenStore?: YumiSignOAuthTokenStore;
+  timeout?: number;
 };
 
 type YumiSignConstructor = {
@@ -70,6 +77,7 @@ type YumiSignObject = {
   ): void;
   _delOAuthToken(): void;
   _getOAuthTokenStore(): YumiSignOAuthTokenStore;
+  _getRequestConfig(): YumiSignRequestConfig;
   _bindResources: () => void;
   oauth: {
     refresh: ({
@@ -98,10 +106,15 @@ type YumiSignResourceObject = {
     init: RequestInit,
     oAuthToken: YumiSignOAuthToken
   ): RequestInit;
-  _request(uri: string, init: RequestInit): Promise<Response>;
+  _request(
+    uri: string,
+    init: RequestInit,
+    options?: YumiSignRequestOptions
+  ): Promise<Response>;
   _makeRequest(
     endpoint: string,
-    init: RequestInit
+    init: RequestInit,
+    options?: YumiSignRequestOptions
   ): Promise<YumiSignResponse<any>>; // eslint-disable-line @typescript-eslint/no-explicit-any
 };
 

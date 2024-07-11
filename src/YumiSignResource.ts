@@ -52,13 +52,33 @@ YumiSignResource.prototype = {
     };
   },
 
-  _request(uri: string, init: RequestInit): Promise<Response> {
-    return fetch(uri, init);
+  _request(
+    uri: string,
+    init: RequestInit,
+    options?: YumiSignRequestOptions
+  ): Promise<Response> {
+    const controller = new AbortController();
+    const {signal} = controller;
+    const requestConfig = this._yumisign._getRequestConfig();
+
+    const timeout = options?.timeout || requestConfig.timeout;
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+    return fetch(uri, {...init, signal})
+      .then((response) => {
+        clearTimeout(timeoutId);
+        return response;
+      })
+      .catch((error) => {
+        clearTimeout(timeoutId);
+        throw error;
+      });
   },
 
   _makeRequest(
     endpoint: string,
-    init: RequestInit
+    init: RequestInit,
+    options?: YumiSignRequestOptions
   ): Promise<YumiSignResponse<any>> {
     const uri = this._createUri(endpoint);
 
@@ -110,7 +130,8 @@ YumiSignResource.prototype = {
     if (!this.publicUri) {
       return this._request(
         uri,
-        this._addAuthorizationHeader(init, this._yumisign._getOAuthToken())
+        this._addAuthorizationHeader(init, this._yumisign._getOAuthToken()),
+        options
       )
         .then((response) => {
           if (response.status === 401) {
@@ -124,7 +145,8 @@ YumiSignResource.prototype = {
                   this._addAuthorizationHeader(
                     init,
                     this._yumisign._getOAuthToken()
-                  )
+                  ),
+                  options
                 ).then((retryResponse) => {
                   if (retryResponse.status === 401) {
                     return this._yumisign.oauth
@@ -145,7 +167,7 @@ YumiSignResource.prototype = {
         .catch((error) => rejectError(error));
     }
 
-    return this._request(uri, init)
+    return this._request(uri, init, options)
       .then((response) => resolveResponse(response))
       .catch((error) => rejectError(error));
   },

@@ -7,12 +7,15 @@ import {makeAutoPaginatePromise} from '../utils/pagination.js';
 export const Profile = YumiSignResource.extend({
   resourcePath: '/profile',
 
-  retrieve(): Promise<YumiSign.Response<YumiSign.Profile>> {
-    return this._makeRequest('', {method: 'GET'});
+  retrieve(
+    options?: YumiSign.RequestOptions
+  ): Promise<YumiSign.Response<YumiSign.Profile>> {
+    return this._makeRequest('', {method: 'GET'}, options);
   },
 
   listActions(
-    params?: YumiSign.ProfileActionListParams
+    params?: YumiSign.ProfileActionListParams,
+    options?: YumiSign.RequestOptions
   ): YumiSign.PaginatedListPromise<YumiSign.Action> {
     const list = (
       params?: YumiSign.ProfileActionListParams
@@ -21,7 +24,8 @@ export const Profile = YumiSignResource.extend({
 
       return this._makeRequest<YumiSign.PaginatedList<YumiSign.Action>>(
         endpoint,
-        {method: 'GET'}
+        {method: 'GET'},
+        options
       ).then((paginatedList) => {
         const {items, ...rest} = paginatedList;
 
@@ -41,7 +45,8 @@ export const Profile = YumiSignResource.extend({
   },
 
   listSignedEnvelopes(
-    params?: YumiSign.ProfileSignedEnvelopeListParams
+    params?: YumiSign.ProfileSignedEnvelopeListParams,
+    options?: YumiSign.RequestOptions
   ): YumiSign.PaginatedListPromise<YumiSign.Envelope> {
     const list = (
       params?: YumiSign.ProfileSignedEnvelopeListParams
@@ -52,7 +57,8 @@ export const Profile = YumiSignResource.extend({
 
       return this._makeRequest<YumiSign.PaginatedList<YumiSign.Envelope>>(
         endpoint,
-        {method: 'GET'}
+        {method: 'GET'},
+        options
       ).then((paginatedList) => {
         const {items, ...rest} = paginatedList;
 

@@ -9,20 +9,24 @@ declare module 'yumisign' {
       /**
        * Retrieves current profile.
        */
-      retrieve(): Promise<YumiSign.Response<YumiSign.Profile>>;
+      retrieve(
+        options?: YumiSign.RequestOptions
+      ): Promise<YumiSign.Response<YumiSign.Profile>>;
 
       /**
        * Return a list of your current actions.
        */
       listActions(
-        params?: ProfileActionListParams
+        params?: ProfileActionListParams,
+        options?: YumiSign.RequestOptions
       ): YumiSign.PaginatedListPromise<YumiSign.Action>;
 
       /**
        * Return a list of your signed envelopes.
        */
       listSignedEnvelopes(
-        params?: ProfileSignedEnvelopeListParams
+        params?: ProfileSignedEnvelopeListParams,
+        options?: YumiSign.RequestOptions
       ): YumiSign.PaginatedListPromise<YumiSign.Envelope>;
     }
   }

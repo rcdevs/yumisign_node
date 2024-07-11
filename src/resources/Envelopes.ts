@@ -9,16 +9,19 @@ export const Envelopes = YumiSignResource.extend({
 
   retrieve(
     id: string,
-    params?: YumiSign.EnvelopeRetrieveParams
+    params?: YumiSign.EnvelopeRetrieveParams,
+    options?: YumiSign.RequestOptions
   ): Promise<YumiSign.Response<YumiSign.Envelope>> {
     return this._makeRequest<YumiSign.Envelope>(
       `/${id}${params?.session ? '?session=1' : ''}`,
-      {method: 'GET'}
+      {method: 'GET'},
+      options
     ).then((envelope) => toEnvelope(envelope));
   },
 
   list(
-    params?: YumiSign.EnvelopeListParams
+    params?: YumiSign.EnvelopeListParams,
+    options?: YumiSign.RequestOptions
   ): YumiSign.PaginatedListPromise<YumiSign.Envelope> {
     const list = (
       params?: YumiSign.EnvelopeListParams
@@ -29,7 +32,8 @@ export const Envelopes = YumiSignResource.extend({
 
       return this._makeRequest<YumiSign.PaginatedList<YumiSign.Envelope>>(
         endpoint,
-        {method: 'GET'}
+        {method: 'GET'},
+        options
       ).then((paginatedList) => {
         const {items, ...rest} = paginatedList;
 
@@ -49,7 +53,8 @@ export const Envelopes = YumiSignResource.extend({
   },
 
   create(
-    params: YumiSign.EnvelopeCreateParams
+    params: YumiSign.EnvelopeCreateParams,
+    options?: YumiSign.RequestOptions
   ): Promise<YumiSign.Response<YumiSign.Envelope>> {
     const body = new FormData();
     body.append('name', params.name);
@@ -90,32 +95,37 @@ export const Envelopes = YumiSignResource.extend({
       });
     }
 
-    return this._makeRequest<YumiSign.Envelope>('', {
-      method: 'POST',
-      body,
-    }).then((envelope) => toEnvelope(envelope));
+    return this._makeRequest<YumiSign.Envelope>(
+      '',
+      {method: 'POST', body},
+      options
+    ).then((envelope) => toEnvelope(envelope));
   },
 
   addDocument(
     id: string,
-    params: YumiSign.EnvelopeAddDocumentParams
+    params: YumiSign.EnvelopeAddDocumentParams,
+    options?: YumiSign.RequestOptions
   ): Promise<YumiSign.Response<YumiSign.Envelope>> {
     const body = new FormData();
     body.append('document', params.document, params.documentName);
 
-    return this._makeRequest<YumiSign.Envelope>(`/${id}/documents`, {
-      method: 'POST',
-      body,
-    }).then((envelope) => toEnvelope(envelope));
+    return this._makeRequest<YumiSign.Envelope>(
+      `/${id}/documents`,
+      {method: 'POST', body},
+      options
+    ).then((envelope) => toEnvelope(envelope));
   },
 
   designerUri(
     id: string,
-    params?: YumiSign.EnvelopeDesignerUriParams
+    params?: YumiSign.EnvelopeDesignerUriParams,
+    options?: YumiSign.RequestOptions
   ): Promise<string> {
     return this._makeRequest<{session: string; designerUrl: string}>(
       `/${id}/session`,
-      {method: 'GET'}
+      {method: 'GET'},
+      options
     ).then(({designerUrl}) => {
       const url = new URL(designerUrl);
       if (params?.callback) {
@@ -128,16 +138,25 @@ export const Envelopes = YumiSignResource.extend({
     });
   },
 
-  viewSignedUri(id: string): Promise<string> {
+  viewSignedUri(
+    id: string,
+    options?: YumiSign.RequestOptions
+  ): Promise<string> {
     return this._makeRequest<{session: string; envelopeView: string}>(
       `/${id}/session`,
-      {method: 'GET'}
+      {method: 'GET'},
+      options
     ).then(({envelopeView}) => envelopeView);
   },
 
-  start(id: string): Promise<YumiSign.Response<YumiSign.Envelope>> {
-    return this._makeRequest<YumiSign.Envelope>(`/${id}/start`, {
-      method: 'PUT',
-    }).then((envelope) => toEnvelope(envelope));
+  start(
+    id: string,
+    options?: YumiSign.RequestOptions
+  ): Promise<YumiSign.Response<YumiSign.Envelope>> {
+    return this._makeRequest<YumiSign.Envelope>(
+      `/${id}/start`,
+      {method: 'PUT'},
+      options
+    ).then((envelope) => toEnvelope(envelope));
   },
 } as YumiSign.EnvelopesResource);

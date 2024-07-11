@@ -9,17 +9,20 @@ export const Templates = YumiSignResource.extend({
 
   retrieve(
     workspaceId: number,
-    id: number
+    id: number,
+    options?: YumiSign.RequestOptions
   ): Promise<YumiSign.Response<YumiSign.Template>> {
     return this._makeRequest<YumiSign.Template>(
       `/workspaces/${workspaceId}/templates/${id}`,
-      {method: 'GET'}
+      {method: 'GET'},
+      options
     ).then((template) => toTemplate(template));
   },
 
   list(
     workspaceId: number,
-    params?: YumiSign.TemplateListParams
+    params?: YumiSign.TemplateListParams,
+    options?: YumiSign.RequestOptions
   ): YumiSign.PaginatedListPromise<YumiSign.Template> {
     const list = (
       params?: YumiSign.TemplateListParams
@@ -33,7 +36,8 @@ export const Templates = YumiSignResource.extend({
 
       return this._makeRequest<YumiSign.PaginatedList<YumiSign.Template>>(
         endpoint,
-        {method: 'GET'}
+        {method: 'GET'},
+        options
       ).then((paginatedList) => {
         const {items, ...rest} = paginatedList;
 
@@ -54,7 +58,8 @@ export const Templates = YumiSignResource.extend({
 
   use(
     id: number,
-    params: YumiSign.TemplateUseParams
+    params: YumiSign.TemplateUseParams,
+    options?: YumiSign.RequestOptions
   ): Promise<YumiSign.Response<YumiSign.Envelope>> {
     return this._makeRequest<YumiSign.Envelope>(
       `/cloner/template/${id}/workflow`,
@@ -62,7 +67,8 @@ export const Templates = YumiSignResource.extend({
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(params),
-      }
+      },
+      options
     ).then((envelope) => toEnvelope(envelope));
   },
 } as YumiSign.TemplatesResource);

@@ -12,7 +12,7 @@ describe('Workspaces resource', () => {
     const workspacesResource = mockResource<YumiSign.WorkspacesResource>(
       yumisign,
       Workspaces,
-      [{id: 1}, {id: 2}]
+      {body: [{id: 1}, {id: 2}]}
     );
 
     it('Sends the correct request', async () => {

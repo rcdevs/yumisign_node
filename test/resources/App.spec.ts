@@ -9,9 +9,11 @@ const yumisign = mockYumiSign();
 describe('Subscriptions resource', () => {
   describe('initialize', () => {
     const appResource = mockResource<YumiSign.AppResource>(yumisign, App, {
-      profile: {id: 1},
-      workspaces: [{id: 1}],
-      currentSubscription: {id: 1},
+      body: {
+        profile: {id: 1},
+        workspaces: [{id: 1}],
+        currentSubscription: {id: 1},
+      },
     });
 
     it('Sends the correct request', async () => {

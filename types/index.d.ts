@@ -25,6 +25,13 @@
 declare module 'yumisign' {
   // Added to in other modules, referenced above.
   export namespace YumiSign {
+    interface RequestOptions {
+      /**
+       * Specify a timeout for a request in milliseconds.
+       */
+      timeout?: number;
+    }
+
     type Response<T> = T & {
       lastResponse: {
         headers: {[key: string]: string};
@@ -146,6 +153,11 @@ declare module 'yumisign' {
      * The oauth token store for retrieve token on mount and change it on refresh.
      */
     oAuthTokenStore?: YumiSignOAuthTokenStore;
+
+    /**
+     * Request timeout in milliseconds. Default 30000.
+     */
+    timeout?: number;
   }
 
   export class YumiSign {
@@ -187,7 +199,8 @@ declare module 'yumisign' {
     resourcePath: string;
     _makeRequest<T>(
       endpoint: string,
-      init: RequestInit
+      init: RequestInit,
+      options?: YumiSign.RequestOptions
     ): Promise<YumiSign.Response<T>>;
   }
 

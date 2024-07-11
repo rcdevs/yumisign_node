@@ -5,11 +5,13 @@ export const App = YumiSignResource.extend({
   resourcePath: '/app',
 
   init(
-    params: YumiSign.AppInitializeParams
+    params: YumiSign.AppInitializeParams,
+    options?: YumiSign.RequestOptions
   ): Promise<YumiSign.Response<YumiSign.AppInitializeResponse>> {
     return this._makeRequest<YumiSign.AppInitializeResponse>(
       `/initialize?data[]=${params.data.join('&data[]=')}`,
-      {method: 'GET'}
+      {method: 'GET'},
+      options
     );
   },
 } as YumiSign.AppResource);

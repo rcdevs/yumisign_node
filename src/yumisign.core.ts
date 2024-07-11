@@ -11,6 +11,7 @@ const ALLOWED_CONFIGURATIONS: string[] = [
   'clientSecret',
   'baseUri',
   'oAuthTokenStore',
+  'timeout',
 ];
 
 export function createYumiSign(
@@ -133,6 +134,12 @@ export function createYumiSign(
           },
         }
       );
+    },
+
+    _getRequestConfig(): YumiSignRequestConfig {
+      return {
+        timeout: this._config?.timeout || 30000,
+      };
     },
 
     _bindResources(): void {

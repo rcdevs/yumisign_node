@@ -43,19 +43,26 @@ export const OAuth = YumiSignResource.extend({
     ].join('');
   },
 
-  access(params: YumiSign.OAuthAccessParams): Promise<YumiSign.OAuthToken> {
+  access(
+    params: YumiSign.OAuthAccessParams,
+    options?: YumiSign.RequestOptions
+  ): Promise<YumiSign.OAuthToken> {
     return new Promise((resolve, reject) => {
-      this._makeRequest<YumiSign.OAuthToken>('/access', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          client_id: this._yumisign._getClientId(),
-          client_secret: this._yumisign._getClientSecret(),
-          redirect_uri: params.redirectUri,
-          code: params.code,
-          grant_type: 'code',
-        }),
-      })
+      this._makeRequest<YumiSign.OAuthToken>(
+        '/access',
+        {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            client_id: this._yumisign._getClientId(),
+            client_secret: this._yumisign._getClientSecret(),
+            redirect_uri: params.redirectUri,
+            code: params.code,
+            grant_type: 'code',
+          }),
+        },
+        options
+      )
         .then((oAuthTokenResponse) => {
           const {lastResponse, ...oAuthToken} = oAuthTokenResponse;
 
@@ -77,7 +84,8 @@ export const OAuth = YumiSignResource.extend({
   },
 
   refresh(
-    params: YumiSign.OAuthRefreshParams
+    params: YumiSign.OAuthRefreshParams,
+    options?: YumiSign.RequestOptions
   ): Promise<Omit<YumiSign.OAuthToken, 'refresh_token'>> {
     return new Promise((resolve, reject) => {
       this._makeRequest<Omit<YumiSign.OAuthToken, 'refresh_token'>>(
@@ -90,7 +98,8 @@ export const OAuth = YumiSignResource.extend({
             client_secret: this._yumisign._getClientSecret(),
             refresh_token: params.refreshToken,
           }),
-        }
+        },
+        options
       )
         .then((oAuthTokenResponse) => {
           const {lastResponse, ...oAuthToken} = oAuthTokenResponse;

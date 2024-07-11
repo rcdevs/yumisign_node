@@ -179,10 +179,16 @@ npm run build
 npm run test
 ```
 
-Run a single test:
+Run a single test suite:
 
 ```sh
 npm run mocha test/Errors.spec.ts
+```
+
+Run a single test in watch mode:
+
+```sh
+npm run mocha test/Errors.spec.ts -- --grep 'YumiSignError' --watch
 ```
 
 Run prettier:

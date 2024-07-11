@@ -4,7 +4,10 @@ declare module 'yumisign' {
       /**
        * Retrieves a subscription.
        */
-      retrieve(id: number): Promise<YumiSign.Response<YumiSign.Subscription>>;
+      retrieve(
+        id: number,
+        options?: YumiSign.RequestOptions
+      ): Promise<YumiSign.Response<YumiSign.Subscription>>;
     }
   }
 }

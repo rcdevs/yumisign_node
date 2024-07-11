@@ -65,10 +65,12 @@ describe('OAuth resource', () => {
       yumisign,
       OAuth,
       {
-        access_token: 'test_new_access_token',
-        refresh_token: 'test_new_refresh_token',
-        expires_in: 60 * 60,
-        token_type: 'Bearer',
+        body: {
+          access_token: 'test_new_access_token',
+          refresh_token: 'test_new_refresh_token',
+          expires_in: 60 * 60,
+          token_type: 'Bearer',
+        },
       }
     );
     const params: YumiSign.OAuthAccessParams = {
@@ -118,10 +120,12 @@ describe('OAuth resource', () => {
       yumisign,
       OAuth,
       {
-        access_token: 'test_new_access_token',
-        refresh_token: 'test_new_refresh_token',
-        expires_in: 60 * 60,
-        token_type: 'Bearer',
+        body: {
+          access_token: 'test_new_access_token',
+          refresh_token: 'test_new_refresh_token',
+          expires_in: 60 * 60,
+          token_type: 'Bearer',
+        },
       }
     );
     const params: YumiSign.OAuthRefreshParams = {

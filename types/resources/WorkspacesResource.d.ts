@@ -4,7 +4,9 @@ declare module 'yumisign' {
       /**
        * Returns a list of your workspaces.
        */
-      list(): Promise<YumiSign.Response<YumiSign.Workspace[]>>;
+      list(
+        options?: YumiSign.RequestOptions
+      ): Promise<YumiSign.Response<YumiSign.Workspace[]>>;
     }
   }
 }

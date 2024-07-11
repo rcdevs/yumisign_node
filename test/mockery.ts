@@ -5,6 +5,13 @@
 import {YumiSignResource} from '../src/YumiSignResource.js';
 import YumiSign = require('../src/yumisign.cjs.node.js');
 
+export type ResponseMock = {
+  ok?: boolean;
+  status?: number;
+  headers?: Record<string, string>;
+  body?: Record<string, unknown> | Array<any> | string;
+};
+
 type LastRequest = {
   method: string;
   url: string;
@@ -61,19 +68,16 @@ export function mockResource<T>(
   yumisign: YumiSignMockObject,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   resource: any,
-  response?: Record<string, unknown> | Array<any> | string,
-  options?: {
-    ok?: boolean;
-    headers?: Record<string, string>;
-    status?: number;
-  }
+  response?: (() => ResponseMock) | ResponseMock
 ): YumiSignResourceObject & T {
   // @ts-ignore
   return new ((resource as typeof YumiSignResource).extend({
     _request: (uri: string, init: RequestInit): Promise<Response> => {
-      const ok = typeof options?.ok === 'boolean' ? options?.ok : true;
-      const headers = options?.headers || {'Content-Type': 'application/json'};
-      const status = options?.status || 200;
+      const resp = typeof response === 'function' ? response() : response;
+
+      const ok = typeof resp?.ok === 'boolean' ? resp?.ok : true;
+      const status = resp?.status || 200;
+      const headers = resp?.headers || {'Content-Type': 'application/json'};
 
       const lastRequest: LastRequest = {
         method: init.method || 'POST',
@@ -98,6 +102,7 @@ export function mockResource<T>(
       // @ts-ignore
       return Promise.resolve({
         ok,
+        status,
         headers: {
           has: (header: string): boolean =>
             Object.keys(headers).includes(header),
@@ -108,9 +113,8 @@ export function mockResource<T>(
             throw new Error('Header not found');
           },
         },
-        status,
-        json: () => Promise.resolve(response || {}),
-        text: () => Promise.resolve(response || ''),
+        json: () => Promise.resolve(resp?.body || {}),
+        text: () => Promise.resolve(resp?.body || ''),
       });
     },
   }))(yumisign);

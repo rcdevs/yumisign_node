@@ -132,21 +132,24 @@ declare module 'yumisign' {
        */
       retrieve(
         id: string,
-        params?: EnvelopeRetrieveParams
+        params?: EnvelopeRetrieveParams,
+        options?: YumiSign.RequestOptions
       ): Promise<YumiSign.Response<YumiSign.Envelope>>;
 
       /**
        * Return a list of your envelopes.
        */
       list(
-        params?: EnvelopeListParams
+        params?: EnvelopeListParams,
+        options?: YumiSign.RequestOptions
       ): YumiSign.PaginatedListPromise<YumiSign.Envelope>;
 
       /**
        * Create a new envelope.
        */
       create(
-        params: EnvelopeCreateParams
+        params: EnvelopeCreateParams,
+        options?: YumiSign.RequestOptions
       ): Promise<YumiSign.Response<YumiSign.Envelope>>;
 
       /**
@@ -154,7 +157,8 @@ declare module 'yumisign' {
        */
       addDocument(
         id: string,
-        params: EnvelopeAddDocumentParams
+        params: EnvelopeAddDocumentParams,
+        options?: YumiSign.RequestOptions
       ): Promise<YumiSign.Response<YumiSign.Envelope>>;
 
       /**
@@ -162,18 +166,25 @@ declare module 'yumisign' {
        */
       designerUri(
         id: string,
-        params?: EnvelopeDesignerUriParams
+        params?: EnvelopeDesignerUriParams,
+        options?: YumiSign.RequestOptions
       ): Promise<string>;
 
       /**
        * Get an uri for view signed envelope.
        */
-      viewSignedUri(id: string): Promise<string>;
+      viewSignedUri(
+        id: string,
+        options?: YumiSign.RequestOptions
+      ): Promise<string>;
 
       /**
        * Send the envelope for request signatures.
        */
-      start(id: string): Promise<YumiSign.Response<YumiSign.Envelope>>;
+      start(
+        id: string,
+        options?: YumiSign.RequestOptions
+      ): Promise<YumiSign.Response<YumiSign.Envelope>>;
     }
   }
 }

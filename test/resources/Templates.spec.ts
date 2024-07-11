@@ -12,7 +12,7 @@ describe('Templates resource', () => {
     const templatesResource = mockResource<YumiSign.TemplatesResource>(
       yumisign,
       Templates,
-      {id: 1}
+      {body: {id: 1}}
     );
 
     it('Sends the correct request', async () => {
@@ -37,10 +37,12 @@ describe('Templates resource', () => {
       yumisign,
       Templates,
       {
-        total: 2,
-        limit: 2,
-        pages: 1,
-        items: [{id: 1}, {id: 2}],
+        body: {
+          total: 2,
+          limit: 2,
+          pages: 1,
+          items: [{id: 1}, {id: 2}],
+        },
       }
     );
     const params: YumiSign.TemplateListParams = {page: 1, limit: 10};
@@ -68,7 +70,7 @@ describe('Templates resource', () => {
     const templatesResource = mockResource<YumiSign.TemplatesResource>(
       yumisign,
       Templates,
-      {id: 'env_1'}
+      {body: {id: 'env_1'}}
     );
     const params: YumiSign.TemplateUseParams = {
       name: 'tpl_name',
