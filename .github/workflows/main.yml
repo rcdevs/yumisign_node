@@ -19,9 +19,9 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
 
       - name: Build
         run: |
@@ -35,17 +35,18 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # 19 (Last) + 18, 16, 14, 12 (LTS)
+        # >=12 https://nodejs.org/en/about/previous-releases
         node:
-          - "19"
+          - "22"
+          - "20"
           - "18"
           - "16"
           - "14"
           - "12"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
 
@@ -60,7 +61,7 @@ jobs:
         if: >-
           env.COVERALLS_REPO_TOKEN &&
           github.event_name == 'push' &&
-          matrix.node == '18'
+          matrix.node == '22'
         run: |
           npm run report
           npm run coveralls
@@ -74,9 +75,9 @@ jobs:
     needs: [build, test]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           registry-url: 'https://registry.npmjs.org'
 
