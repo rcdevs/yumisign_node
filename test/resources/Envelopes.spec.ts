@@ -229,7 +229,7 @@ describe('Envelopes resource', () => {
     const envelopesResource = mockResource<YumiSign.EnvelopesResource>(
       yumisign,
       Envelopes,
-      {body: {id: 'env_1'}}
+      {body: {id: 'env_1', status: 'started'}}
     );
 
     it('Sends the correct request', async () => {
@@ -243,9 +243,59 @@ describe('Envelopes resource', () => {
       });
     });
 
-    it('Should return an envelope', async () => {
+    it('Should return a started envelope', async () => {
       const envelope = await envelopesResource.start('env_1');
       expect(envelope.id).to.equal('env_1');
+      expect(envelope.status).to.equal('started');
+    });
+  });
+
+  describe('cancel', () => {
+    const envelopesResource = mockResource<YumiSign.EnvelopesResource>(
+      yumisign,
+      Envelopes,
+      {body: {id: 'env_1', status: 'canceled'}}
+    );
+
+    it('Sends the correct request', async () => {
+      await envelopesResource.cancel('env_1');
+      expect(yumisign.LAST_REQUEST).to.deep.equal({
+        method: 'PUT',
+        url: '/api/v1/envelopes/env_1/cancel',
+        headers: {
+          Authorization: `Bearer ${TEST_ACCESS_TOKEN}`,
+        },
+      });
+    });
+
+    it('Should return a canceled envelope', async () => {
+      const envelope = await envelopesResource.cancel('env_1');
+      expect(envelope.id).to.equal('env_1');
+      expect(envelope.status).to.equal('canceled');
+    });
+  });
+
+  describe('remove', () => {
+    const envelopesResource = mockResource<YumiSign.EnvelopesResource>(
+      yumisign,
+      Envelopes,
+      {status: 204}
+    );
+
+    it('Sends the correct request', async () => {
+      await envelopesResource.remove('env_1');
+      expect(yumisign.LAST_REQUEST).to.deep.equal({
+        method: 'DELETE',
+        url: '/api/v1/envelopes/env_1',
+        headers: {
+          Authorization: `Bearer ${TEST_ACCESS_TOKEN}`,
+        },
+      });
+    });
+
+    it('Should return an empty response', async () => {
+      const response = await envelopesResource.remove('env_1');
+      expect(response.lastResponse).to.include({statusCode: 204});
     });
   });
 });
