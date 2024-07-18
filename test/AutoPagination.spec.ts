@@ -10,33 +10,48 @@ import {mockYumiSign} from './mockery.js';
 
 describe('Auto pagination', () => {
   const mockPagination = (
-    pages: Array<Array<any>>,
+    pages?: Array<Array<any>>,
     options?: {limit?: number; page?: number}
   ) => {
     // @ts-ignore
     const resource = new YumiSignResource(mockYumiSign());
-    const limit = options?.limit ?? pages[0].length;
+    const limit = options?.limit ?? pages?.[0]?.length ?? 0;
     const page = options?.page ?? 1;
 
     return makeAutoPaginationMethods(
       resource,
-      Promise.resolve({
-        total: pages.flat().length,
-        limit,
-        pages: pages.length,
-        items: pages[page - 1],
-      }),
+      Promise.resolve(
+        pages
+          ? {
+              total: pages.flat().length,
+              limit,
+              pages: pages.length,
+              items: pages[page - 1],
+            }
+          : ({} as any)
+      ),
       (params) => {
-        return Promise.resolve({
-          total: pages.flat().length,
-          limit,
-          pages: pages.length,
-          items: pages[params.page - 1],
-        });
+        return Promise.resolve(
+          pages
+            ? {
+                total: pages.flat().length,
+                limit,
+                pages: pages.length,
+                items: pages[params.page - 1],
+              }
+            : ({} as any)
+        );
       },
       {limit, page}
     );
   };
+
+  it('Should throw an error for unsupported api response', () => {
+    const paginator = mockPagination();
+    return expect(paginator.next()).to.be.rejectedWith(
+      /Unsupported api response/
+    );
+  });
 
   it('Should trow an error when the limit is greater than 100', () => {
     const pages = [['env_1', 'env_2'], ['env_3', 'env_4'], ['env_5']];

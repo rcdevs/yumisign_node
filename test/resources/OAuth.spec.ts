@@ -80,7 +80,7 @@ describe('OAuth resource', () => {
     const oAuthToken = yumisign._oAuthToken;
     const storedOAuthToken = yumisign.STORED_OAUTH_TOKEN;
 
-    it('Sends the correct request', async () => {
+    it('Should send the correct request', async () => {
       await oAuthResource.access(params);
       expect(yumisign.LAST_REQUEST).to.deep.equal({
         method: 'POST',
@@ -134,7 +134,7 @@ describe('OAuth resource', () => {
     const oAuthToken = yumisign._oAuthToken;
     const storedOAuthToken = yumisign.STORED_OAUTH_TOKEN;
 
-    it('Sends the correct request', async () => {
+    it('Should send the correct request', async () => {
       await oAuthResource.refresh(params);
       expect(yumisign.LAST_REQUEST).to.deep.equal({
         method: 'POST',

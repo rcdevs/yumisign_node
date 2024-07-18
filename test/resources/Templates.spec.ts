@@ -15,7 +15,7 @@ describe('Templates resource', () => {
       {body: {id: 1}}
     );
 
-    it('Sends the correct request', async () => {
+    it('Should send the correct request', async () => {
       await templatesResource.retrieve(1, 1);
       expect(yumisign.LAST_REQUEST).to.deep.equal({
         method: 'GET',
@@ -47,7 +47,7 @@ describe('Templates resource', () => {
     );
     const params: YumiSign.TemplateListParams = {page: 1, limit: 10};
 
-    it('Sends the correct request', async () => {
+    it('Should send the correct request', async () => {
       await templatesResource.list(1, params);
       expect(yumisign.LAST_REQUEST).to.deep.equal({
         method: 'GET',
@@ -81,7 +81,7 @@ describe('Templates resource', () => {
       workspaceId: 1,
     };
 
-    it('Sends the correct request', async () => {
+    it('Should send the correct request', async () => {
       await templatesResource.use(1, params);
       expect(yumisign.LAST_REQUEST).to.deep.equal({
         method: 'POST',

@@ -15,7 +15,7 @@ describe('Profile resource', () => {
       {body: {id: 1}}
     );
 
-    it('Sends the correct request', async () => {
+    it('Should send the correct request', async () => {
       await profileResource.retrieve();
       expect(yumisign.LAST_REQUEST).to.deep.equal({
         method: 'GET',
@@ -50,7 +50,7 @@ describe('Profile resource', () => {
     );
     const params: YumiSign.ProfileActionListParams = {page: 1, limit: 10};
 
-    it('Sends the correct request', async () => {
+    it('Should send the correct request', async () => {
       await profileResource.listActions(params);
       expect(yumisign.LAST_REQUEST).to.deep.equal({
         method: 'GET',
@@ -87,7 +87,7 @@ describe('Profile resource', () => {
       limit: 10,
     };
 
-    it('Sends the correct request', async () => {
+    it('Should send the correct request', async () => {
       await profileResource.listSignedEnvelopes(params);
       expect(yumisign.LAST_REQUEST).to.deep.equal({
         method: 'GET',

@@ -16,7 +16,7 @@ describe('Envelopes resource', () => {
       {body: {id: 'env_1'}}
     );
 
-    it('Sends the correct request', async () => {
+    it('Should send the correct request', async () => {
       await envelopesResource.retrieve('env_1');
       expect(yumisign.LAST_REQUEST).to.deep.equal({
         method: 'GET',
@@ -48,7 +48,7 @@ describe('Envelopes resource', () => {
     );
     const params: YumiSign.EnvelopeListParams = {page: 1, limit: 10};
 
-    it('Sends the correct request', async () => {
+    it('Should send the correct request', async () => {
       await envelopesResource.list(params);
       expect(yumisign.LAST_REQUEST).to.deep.equal({
         method: 'GET',
@@ -103,7 +103,7 @@ describe('Envelopes resource', () => {
       metadata: {foo: 'bar'},
     };
 
-    it('Sends the correct request', async () => {
+    it('Should send the correct request', async () => {
       await envelopesResource.create(params);
       expect(yumisign.LAST_REQUEST?.body?.document).to.be.instanceof(Blob);
       delete yumisign.LAST_REQUEST?.body?.document;
@@ -152,7 +152,7 @@ describe('Envelopes resource', () => {
       documentName: 'document_name',
     };
 
-    it('Sends the correct request', async () => {
+    it('Should send the correct request', async () => {
       await envelopesResource.addDocument('env_1', params);
       expect(yumisign.LAST_REQUEST?.body?.document).to.be.instanceof(Blob);
       delete yumisign.LAST_REQUEST?.body?.document;
@@ -179,7 +179,7 @@ describe('Envelopes resource', () => {
       {body: {designerUrl: 'https://foo.com/bar'}}
     );
 
-    it('Sends the correct request', async () => {
+    it('Should send the correct request', async () => {
       await envelopesResource.designerUri('env_1');
       expect(yumisign.LAST_REQUEST).to.deep.equal({
         method: 'GET',
@@ -208,7 +208,7 @@ describe('Envelopes resource', () => {
       {body: {envelopeView: 'https://foo.com/bar'}}
     );
 
-    it('Sends the correct request', async () => {
+    it('Should send the correct request', async () => {
       await envelopesResource.viewSignedUri('env_1');
       expect(yumisign.LAST_REQUEST).to.deep.equal({
         method: 'GET',
@@ -232,7 +232,7 @@ describe('Envelopes resource', () => {
       {body: {id: 'env_1'}}
     );
 
-    it('Sends the correct request', async () => {
+    it('Should send the correct request', async () => {
       await envelopesResource.start('env_1');
       expect(yumisign.LAST_REQUEST).to.deep.equal({
         method: 'PUT',

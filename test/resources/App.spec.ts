@@ -16,7 +16,7 @@ describe('Subscriptions resource', () => {
       },
     });
 
-    it('Sends the correct request', async () => {
+    it('Should send the correct request', async () => {
       await appResource.init({
         data: ['profile', 'workspaces', 'currentSubscription'],
       });

@@ -23,6 +23,8 @@ export class YumiSignError extends Error {
     switch (raw.code) {
       case 'AUTHENTICATION_REQUIRED':
         return new YumiSignAuthenticationError(raw);
+      case 'UNAUTHORIZED_TO_PERFORM_THIS_ACTION':
+        return new YumiSignPermissionError(raw);
       case 'VALIDATION_ERROR':
         return new YumiSignValidationError(raw);
       default:

@@ -14,7 +14,7 @@ describe('Subscriptions resource', () => {
       {body: {id: 1}}
     );
 
-    it('Sends the correct request', async () => {
+    it('Should send the correct request', async () => {
       await subscriptionsResource.retrieve(1);
       expect(yumisign.LAST_REQUEST).to.deep.equal({
         method: 'GET',

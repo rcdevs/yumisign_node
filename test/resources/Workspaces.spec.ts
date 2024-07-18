@@ -8,6 +8,30 @@ import {expect} from 'chai';
 const yumisign = mockYumiSign();
 
 describe('Workspaces resource', () => {
+  describe('retrieve', () => {
+    const workspacesResource = mockResource<YumiSign.WorkspacesResource>(
+      yumisign,
+      Workspaces,
+      {body: {id: 1}}
+    );
+
+    it('Should send the correct request', async () => {
+      await workspacesResource.retrieve(1);
+      expect(yumisign.LAST_REQUEST).to.deep.equal({
+        method: 'GET',
+        url: '/api/v1/workspaces/1',
+        headers: {
+          Authorization: `Bearer ${TEST_ACCESS_TOKEN}`,
+        },
+      });
+    });
+
+    it('Should return a workspace', async () => {
+      const workspace = await workspacesResource.retrieve(1);
+      expect(workspace.id).to.equal(1);
+    });
+  });
+
   describe('list', () => {
     const workspacesResource = mockResource<YumiSign.WorkspacesResource>(
       yumisign,
@@ -15,7 +39,7 @@ describe('Workspaces resource', () => {
       {body: [{id: 1}, {id: 2}]}
     );
 
-    it('Sends the correct request', async () => {
+    it('Should send the correct request', async () => {
       await workspacesResource.list();
       expect(yumisign.LAST_REQUEST).to.deep.equal({
         method: 'GET',
