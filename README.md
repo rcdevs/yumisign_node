@@ -40,6 +40,7 @@ Or using ES modules and `async`/`await`:
 
 ```js
 import YumiSign from 'yumisign';
+
 const yumisign = new YumiSign({
   clientId: 'client_id',
   clientSecret: 'client_secret',
@@ -158,7 +159,8 @@ const yumisign = YumiSign({
     del: () => {
       // Remove the stored oauth token if exist
     }
-  }
+  },
+  timeout: 10000
 });
 ```
 
@@ -168,6 +170,25 @@ const yumisign = YumiSign({
 | `clientSecret`    | False    | No default value           | Your YumiSign integration app client secret (Required for api requests) |
 | `baseUri`         | False    | `https://app.yumisign.com` | Base uri of YumiSign website                                            |
 | `oAuthTokenStore` | False    | Local storage              | A store object used to fetch save and remove your oauth token           |
+| `timeout`         | False    | 30000                      | Maximum time a request can take in millisecond                          |
+
+### Timeout config
+
+Timeout can be defined globally:
+
+```js
+const yumisign = YumiSign({
+  timeout: 10 * 1000 // 10 secondes
+});
+```
+
+And overridable per request:
+
+```js
+yumisign.workspaces.list({
+  timeout: 5 * 1000 // 5 secondes
+});
+```
 
 ## Development
 
