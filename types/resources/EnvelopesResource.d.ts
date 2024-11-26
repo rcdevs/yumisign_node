@@ -185,6 +185,22 @@ declare module 'yumisign' {
         id: string,
         options?: YumiSign.RequestOptions
       ): Promise<YumiSign.Response<YumiSign.Envelope>>;
+
+      /**
+       * Abort envelope signature requests.
+       */
+      cancel(
+        id: string,
+        options?: YumiSign.RequestOptions
+      ): Promise<YumiSign.Response<YumiSign.Envelope>>;
+
+      /**
+       * Delete the envelope with its signed document.
+       */
+      remove(
+        id: string,
+        options?: YumiSign.RequestOptions
+      ): Promise<YumiSign.Response<Record<string, never>>>;
     }
   }
 }

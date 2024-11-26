@@ -159,4 +159,26 @@ export const Envelopes = YumiSignResource.extend({
       options
     ).then((envelope) => toEnvelope(envelope));
   },
+
+  cancel(
+    id: string,
+    options?: YumiSign.RequestOptions
+  ): Promise<YumiSign.Response<YumiSign.Envelope>> {
+    return this._makeRequest<YumiSign.Envelope>(
+      `/${id}/cancel`,
+      {method: 'PUT'},
+      options
+    ).then((envelope) => toEnvelope(envelope));
+  },
+
+  remove(
+    id: string,
+    options?: YumiSign.RequestOptions
+  ): Promise<YumiSign.Response<Record<string, never>>> {
+    return this._makeRequest<Record<string, never>>(
+      `/${id}`,
+      {method: 'DELETE'},
+      options
+    );
+  },
 } as YumiSign.EnvelopesResource);
